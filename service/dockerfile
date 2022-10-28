@@ -10,6 +10,9 @@ COPY . .
 
 EXPOSE 5000
 
-RUN npx tsc
+#DEVELOPMENT
+CMD ["npx", "nodemon", "src/index.ts"]
 
-CMD ["node", "dist/index.js"]
+# PRODUCTION
+#RUN npx tsc
+#CMD ["node", "dist/index.js"]
