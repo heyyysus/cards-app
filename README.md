@@ -3,7 +3,7 @@ An application to help UCSB students form and find study groups on campus.
 
 ### Contributors
 - Jesus Velarde - heyyysus
-- Anthony Lo - tonesgainz
+
 ---
 
 ## Run on localhost
