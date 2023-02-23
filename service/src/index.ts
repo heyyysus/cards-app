@@ -18,6 +18,8 @@ const apiDescription: ApiDescription = {
     routes: [],
 };
 
+app.use(Express.static('public'))
+
 app.get('/api', (req, res) => {
     res.json(apiDescription);
 })
