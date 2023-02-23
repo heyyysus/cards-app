@@ -1,0 +1,16 @@
+services:
+  web:
+    build: ./service
+    ports: 
+      - "5000:5000"
+    volumes:
+      - ./service/src:/app/src
+    environment:
+      - APPLICATION_PORT=
+      - POSTGRES_HOST=
+      - POSTGRES_PORT=
+      - POSTGRES_DB=
+      - POSTGRES_USER=postres 
+      - POSTGRES_PASSWORD=postgres
+      - OAUTH_CLIENT_ID=
+      - OAUTH_CLIENT_SECRET=
