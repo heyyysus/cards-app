@@ -5,12 +5,26 @@ services:
       - "5000:5000"
     volumes:
       - ./service/src:/app/src
+    depends_on:
+      - db
     environment:
       - APPLICATION_PORT=
-      - POSTGRES_HOST=
-      - POSTGRES_PORT=
-      - POSTGRES_DB=
-      - POSTGRES_USER=postres 
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=5434
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=pg_user 
+      - POSTGRES_PASSWORD=pg_password
       - OAUTH_CLIENT_ID=
       - OAUTH_CLIENT_SECRET=
+  db:
+    image: postgres:15.2
+    restart: always
+    environment:
+      - POSTGRES_USER=pg_user 
+      - POSTGRES_PASSWORD=pg_password
+    ports:
+      - '5434:5432'
+
+volumes:
+  db:
+    driver: local
