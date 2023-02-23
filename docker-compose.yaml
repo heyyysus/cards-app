@@ -3,5 +3,14 @@ services:
     build: ./service
     ports: 
       - "5000:5000"
-    volumes: 
+    volumes:
       - ./service/src:/app/src
+    environment:
+      - APPLICATION_PORT=5000
+      - POSTGRES_HOST=localhost
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postres 
+      - POSTGRES_PASSWORD=postgres
+      - OAUTH_CLIENT_ID=502816164819-d5mvqnnkr0i29lllivmesmgmq3cffq5i.apps.googleusercontent.com
+      - OAUTH_CLIENT_SECRET=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

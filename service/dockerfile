@@ -6,13 +6,15 @@ COPY package*.json ./
 
 RUN npm install 
 
+
 COPY . .
 
 EXPOSE 5000
 
-#DEVELOPMENT
-CMD ["npx", "nodemon", "src/index.ts"]
+# DEV
+# RUN npm i -g nodemon
+# CMD ["npx", "nodemon", "src/index.ts"]
 
 # PRODUCTION
-#RUN npx tsc
-#CMD ["node", "dist/index.js"]
+RUN npx tsc
+CMD ["node", "dist/index.js"]

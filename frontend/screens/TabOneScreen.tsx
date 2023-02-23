@@ -22,9 +22,10 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
 
   useEffect(() => {
     if(response?.type === "success"){
+      console.log(response);
       const { authentication } = response;
       get_local_user(authentication?.accessToken)
-        .then(u => setLocalUser(u));
+        .then(u => {setLocalUser(u), console.log(u)});
     }
   }, [response]);
 

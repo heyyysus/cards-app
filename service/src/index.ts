@@ -1,4 +1,5 @@
 import Express from 'express';
+import AuthRouter from "./auth/auth.router";
 
 const PORT = 5000;
 
@@ -18,11 +19,7 @@ const apiDescription: ApiDescription = {
     routes: [],
 };
 
-app.use(Express.static('public'))
-
-app.get('/api', (req, res) => {
-    res.json(apiDescription);
-})
+app.use('/api/auth', AuthRouter);
 
 app.listen(PORT, () => {
     return console.log(`Express is listening at http://localhost:${PORT}`);

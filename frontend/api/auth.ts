@@ -1,5 +1,5 @@
 
-const API_URL = "http://localhost:5000/api";
+const API_URL = "http://192.168.0.212:5000/api";
 
 export interface IUser {
     email: string
@@ -11,11 +11,11 @@ export const get_local_user = async (access_token?: string): Promise<IUser | nul
         const response = await fetch(`${API_URL}/auth/`, {
             method: "GET",
             headers: {
-                "Authentication": `Bearer ${access_token}`
+                "Authorization": `Bearer ${access_token}`
             }
         });
         if(response.ok)
-            return response.json();
+            return await response.json();
         return null;
     } catch(e) {
         console.log(e);

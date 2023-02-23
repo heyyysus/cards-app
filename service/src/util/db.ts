@@ -1,6 +1,4 @@
 import { Pool, PoolConfig } from "pg";
-import * as dotenv from "dotenv";
-dotenv.config()
 
 const host = process.env.POSTGRES_HOST || "localhost";
 const port = parseInt(process.env.POSTGRES_PORT) || 5432;
@@ -17,5 +15,6 @@ const pool_config: PoolConfig = {
 };
 
 const pool = new Pool(pool_config);
+//const pool = "";
 
 export default pool;
