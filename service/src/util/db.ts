@@ -15,6 +15,5 @@ const pool_config: PoolConfig = {
 };
 
 const pool = new Pool(pool_config);
-//const pool = "";
 
 export default pool;

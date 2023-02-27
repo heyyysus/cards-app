@@ -10,39 +10,17 @@ import { Button } from 'react-native';
 import { useEffect, useState } from 'react';
 import { get_local_user, IUser } from '../api/auth';
 
-export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
+export interface TabOneScreenProps extends RootTabScreenProps<'TabOne'>{
+  localUser?: IUser
+}
 
-  const OAUTH_CLIENT_ID = "502816164819-d5mvqnnkr0i29lllivmesmgmq3cffq5i.apps.googleusercontent.com";
+export default function TabOneScreen({ navigation, localUser }: TabOneScreenProps) {
 
-  const [ request, response, promptAsync] = Google.useAuthRequest({
-    expoClientId: OAUTH_CLIENT_ID
-  });
-
-  const [ localUser, setLocalUser ] = useState<IUser | null>(null);
-
-  useEffect(() => {
-    if(response?.type === "success"){
-      console.log(response);
-      const { authentication } = response;
-      get_local_user(authentication?.accessToken)
-        .then(u => {setLocalUser(u), console.log(u)});
-    }
-  }, [response]);
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Tab One</Text>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-
-      <Button
-        disabled={!request}
-        title="Login"
-        onPress={() => {
-          promptAsync();
-        }}
-      />
-
-      <Text>{ localUser?.email }</Text>
 
       <EditScreenInfo path="/screens/TabOneScreen.tsx" />
     </View>

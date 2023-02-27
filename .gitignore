@@ -4,3 +4,5 @@
 .DS_Store
 
 docker-compose.yaml
+
+*.pkg

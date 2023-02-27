@@ -1,11 +1,12 @@
 import { Request, Response, NextFunction } from "express";
+import * as UserService from "../user/user.service";
 
-const GOOGLE_TOKEN_API_URL = "https://oauth2.googleapis.com/tokeninfo";
+const TOKEN_INFO_API = "https://oauth2.googleapis.com/tokeninfo";
 
 export const RequireAuthentication = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const token = req.header('Authorization').split(' ')[1];
-        const token_api_call = await fetch(`${GOOGLE_TOKEN_API_URL}?access_token=${token}`, {
+        const token_api_call = await fetch(`${TOKEN_INFO_API}?access_token=${token}`, {
             method: "GET",
         });
         //console.log(await token_api_call.json());
@@ -13,7 +14,7 @@ export const RequireAuthentication = async (req: Request, res: Response, next: N
             const google_token_response = await token_api_call.json();
             
             if(google_token_response.email_verified){
-                req.user = { email: google_token_response.email };
+                req.user = await UserService.getOrCreateByEmail(google_token_response.email);
                 next()
             } else {
                 res.status(403).send();
