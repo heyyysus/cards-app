@@ -1,5 +1,6 @@
 import Express from 'express';
 import AuthRouter from "./auth/auth.router";
+import { auth } from "express-oauth2-jwt-bearer";
 
 const PORT = 5000;
 
@@ -18,6 +19,15 @@ const apiDescription: ApiDescription = {
     description: "backend for gaucho group application.",
     routes: [],
 };
+
+
+const jwtCheck = auth({
+    audience: 'https://hop-in.com',
+    issuerBaseURL: 'https://dev-wuhjbaj4.us.auth0.com/',
+    tokenSigningAlg: 'RS256'
+  });
+
+app.use(jwtCheck)
 
 app.use('/api/auth', AuthRouter);
 
