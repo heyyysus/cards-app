@@ -1,11 +1,10 @@
 import { Router } from "express";
-import { RequireAuthentication } from "./auth.middleware";
 
 
 const router = Router();
 
-router.get('/', RequireAuthentication, (req, res) => {
-    res.json(req.auth);
+router.get('/', (req, res) => {
+    res.json({user_id: req.auth.payload.sub});
     //res.send('hello');
 })
 

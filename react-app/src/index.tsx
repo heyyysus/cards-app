@@ -14,9 +14,11 @@ root.render(
   <Auth0Provider
     domain={config.OAUTH_DOMAIN}
     clientId={config.OAUTH_CLIENT_ID}
+    useRefreshTokens={true}
     authorizationParams={{
       redirect_uri: `${window.location.origin}`,
       scope: "openid profile",
+      audience: "https://hop-in.com",
     }}
   >
     <App />

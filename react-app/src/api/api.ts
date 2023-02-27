@@ -1,8 +1,8 @@
 import { FetchOptions } from "@auth0/auth0-spa-js";
 
-const API_URL = "http://localhost:5000";
+const API_URL = "http://localhost:5000/api";
 
-const useApi = (token: string) => {
+export const api = (token: string) => {
     const options = (method: string): RequestInit => ({
         method: method,
         headers: {
@@ -10,9 +10,9 @@ const useApi = (token: string) => {
         }
     });
     return {
-        get: (path: string) => fetch(path, options("GET")),
-        post: (path: string) => fetch(path, options("POST")),
-        put: (path: string) => fetch(path, options("PUT")),
-        delete: (path: string) => fetch(path, options("DELETE")),
+        get: async (path: string) => fetch(`${API_URL}/${path}`, options("GET")),
+        post: (path: string) => fetch(`${API_URL}/${path}`, options("POST")),
+        put: (path: string) => fetch(`${API_URL}/${path}`, options("PUT")),
+        delete: (path: string) => fetch(`${API_URL}/${path}`, options("DELETE")),
     };
 }

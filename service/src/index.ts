@@ -1,6 +1,7 @@
 import Express from 'express';
 import AuthRouter from "./auth/auth.router";
 import { auth } from "express-oauth2-jwt-bearer";
+import cors from 'cors';
 
 const PORT = 5000;
 
@@ -27,6 +28,7 @@ const jwtCheck = auth({
     tokenSigningAlg: 'RS256'
   });
 
+app.use(cors());
 app.use(jwtCheck)
 
 app.use('/api/auth', AuthRouter);
