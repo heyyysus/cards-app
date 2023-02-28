@@ -6,6 +6,8 @@ import reportWebVitals from './reportWebVitals';
 import { Auth0Provider } from "@auth0/auth0-react";
 
 import config from "./config.json";
+import { ThemeProvider } from '@mui/material';
+import theme from './utils/theme';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -17,11 +19,13 @@ root.render(
     useRefreshTokens={true}
     authorizationParams={{
       redirect_uri: `${window.location.origin}`,
-      scope: "openid profile",
+      scope: "openid profile offline-access",
       audience: "https://hop-in.com",
     }}
   >
-    <App />
+    <ThemeProvider theme={theme}>
+      <App />
+    </ThemeProvider>
   </Auth0Provider>,
 );
 

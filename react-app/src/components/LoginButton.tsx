@@ -4,7 +4,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { ClassNamesArg } from '@emotion/react';
 
 export interface LoginButtonProps {
-    className: string,
+    className?: string,
 };
 
 export const LoginButton: FC<LoginButtonProps> =  ({ className }) => {

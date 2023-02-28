@@ -1,11 +1,13 @@
 import { GetTokenSilentlyOptions, useAuth0 } from '@auth0/auth0-react';
+import { Avatar } from '@mui/material';
 import { FC, useEffect, useState } from 'react';
+import { redirect } from 'react-router-dom';
 import { getLocalUser } from '../api/auth';
 import { IUser } from '../api/models/IUser';
 import { LoginButton } from '../components/LoginButton';
 import { ProfileCard } from '../components/ProfileCard';
 
-import Styles from './home.module.css';
+import Styles from './Home.module.css';
 
 export interface HomePageProps {};
 
@@ -19,7 +21,7 @@ const HomePage: FC<HomePageProps> = ({  }) => {
         getAccessTokenSilently()
         .then(t => {
             getLocalUser(t)
-            .then(u => setLocalUser(u))
+            .then(u => { console.log(u); setLocalUser(u) })
         })
     }, [getAccessTokenSilently, user?.sub])
 
@@ -28,16 +30,19 @@ const HomePage: FC<HomePageProps> = ({  }) => {
             <p>Loading...</p>
         );
     else if (localUser){
-        return(<p>{localUser.user_id}</p>);
+        return(
+        <>
+        <p>{localUser.username}'s profile</p>
+        <Avatar
+            alt={localUser.username}
+            src="/static/images/profile/default.png"
+            sx={{ width: 24, height: 24 }}
+            />
+        </>
+        );
     }
-    else
-    return (
-        <div className={ Styles.home_page }>
-            <div>
-                <LoginButton className={ Styles.login_button } />
-            </div>
-        </div>
-    );
+   else
+    return (<></>);
 };
 
 export default HomePage;

@@ -1,10 +1,11 @@
 import { Router } from "express";
+import { RetrieveAuthUserData } from "./auth.middleware";
 
 
 const router = Router();
 
-router.get('/', (req, res) => {
-    res.json({user_id: req.auth.payload.sub});
+router.get('/', RetrieveAuthUserData, (req, res) => {
+    res.json(req.user);
     //res.send('hello');
 })
 

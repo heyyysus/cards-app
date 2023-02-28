@@ -24,8 +24,8 @@ export const create = async (newUser: IUser): Promise<IUser> => {
     if(usernameCheck) throw new UsernameAlreadyExistsError;
     try {
         const insertQuery = {
-            text: `INSERT INTO users (email, username) VALUES ($1, $2) RETURNING *`,
-            values: [newUser.email, newUser.username]
+            text: `INSERT INTO users (user_id, username) VALUES ($1, $2) RETURNING *`,
+            values: [newUser.user_id, newUser.username]
         }
         const insertResult = await db.query(insertQuery);
         return insertResult.rows.at(0);
@@ -35,22 +35,21 @@ export const create = async (newUser: IUser): Promise<IUser> => {
     }
 }
 
-export const createWithAutoUsername = async (email: string): Promise<IUser> => {
+export const createWithAutoUsername = async (id: string): Promise<IUser> => {
     let username = "";
     do {
         username = `user_${crypto.randomInt(100000000)}`;
     } while (await fetchOneBy('username', username, ['user_id']))
     const newUser: IUser = {
-        user_id: 0,
-        email: email,
+        user_id: id,
         username: username
     };
     return await create(newUser);
 }
 
-export const getOrCreateByEmail = async (email: string): Promise<IUser> => {
-    const existingUser = await fetchOneBy('email', email, ['*']);
+export const getOrCreateByUserId = async (id: string): Promise<IUser> => {
+    const existingUser = await fetchOneBy('user_id', id, ['*']);
     console.log(existingUser);
     if(existingUser) return existingUser;
-    else return await createWithAutoUsername(email);
+    else return await createWithAutoUsername(id);
 }
