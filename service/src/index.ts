@@ -24,7 +24,7 @@ const apiDescription: ApiDescription = {
 
 const jwtCheck = auth({
     audience: 'https://hop-in.com',
-    issuerBaseURL: 'https://dev-wuhjbaj4.us.auth0.com/',
+    issuerBaseURL: process.env.OAUTH_CLIENT_DOMAIN,
     tokenSigningAlg: 'RS256'
   });
 
