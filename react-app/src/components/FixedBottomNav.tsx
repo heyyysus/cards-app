@@ -1,20 +1,30 @@
 import { BottomNavigation, BottomNavigationAction, Paper } from '@mui/material';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import HomeIcon from "@mui/icons-material/Home";
 import PersonIcon from "@mui/icons-material/Person";
 import SearchIcon from "@mui/icons-material/Search";
+import { useLocation, useNavigate } from 'react-router-dom';
+import path from 'path';
 
-export interface FixedBottomNavProps {};
+export interface FixedBottomNavProps {
+};
 
-export const FixedBottomNav: FC<FixedBottomNavProps> =  ({}) => {
-    const [ value, setValue ] = useState(0);
+export const FixedBottomNav: FC<FixedBottomNavProps> =  ({ }) => {
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    const paths = ["/", "/explore", "/account"]
+    useEffect(() => { 
+      console.log(location.pathname)
+    }, [location])
+
     return (
         <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0}} elevation={1}>
         <BottomNavigation
           showLabels
-          value={value}
+          value={paths.indexOf(location.pathname)}
           onChange={(event, newValue) => {
-            setValue(newValue);
+            navigate(paths[newValue]);
           }}
         >
           <BottomNavigationAction label="Home" icon={<HomeIcon />} />

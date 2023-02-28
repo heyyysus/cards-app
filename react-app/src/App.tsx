@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from '@mui/material/Button';
 import { useAuth0 } from "@auth0/auth0-react";
-import { BrowserRouter as Router, Route, Routes as Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes as Switch, useNavigate } from "react-router-dom";
 
 
 import Container from '@mui/material/Container';
@@ -12,6 +12,7 @@ import { FixedBottomNav } from './components/FixedBottomNav';
 import HomePage from './pages/Home';
 import LoadingPage from './pages/LoadingPage';
 import LandingPage from './pages/LandingPage';
+import AccountPage from './pages/Account';
 
 
 function App() {
@@ -28,13 +29,14 @@ function App() {
   );
 
   return (
-    <Container maxWidth='sm' >
+    <Container className={Styles.main_container} maxWidth='sm' >
         <Router>
           <Switch>
             <Route path='/' element={<HomePage />} />
+            <Route path='/account' element={<AccountPage />} />
           </Switch>
+          <FixedBottomNav />
         </Router>
-        <FixedBottomNav />
     </Container>
   );
 }
