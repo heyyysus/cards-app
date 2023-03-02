@@ -1,5 +1,5 @@
 import { GetTokenSilentlyOptions, useAuth0 } from '@auth0/auth0-react';
-import { Avatar, Chip } from '@mui/material';
+import { Avatar, Button, Chip } from '@mui/material';
 import { FC, useEffect, useState } from 'react';
 import { redirect } from 'react-router-dom';
 import { getLocalUser } from '../api/auth';
@@ -16,7 +16,11 @@ export interface HomePageProps {};
 
 const HomePage: FC<HomePageProps> = ({  }) => {
 
-    return (<></>)
+    const { logout } = useAuth0();
+
+    return (<>
+        <Button onClick={() => {logout()}} >Logout</Button>
+    </>)
 };
 
 export default HomePage;

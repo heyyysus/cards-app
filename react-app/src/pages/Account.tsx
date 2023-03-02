@@ -7,13 +7,14 @@ import { UserProfileChip } from "../components/UserProfileChip";
 
 export default function AccountPage(){
 
-    const { user, isAuthenticated, isLoading, getAccessTokenSilently } = useAuth0();
+    const { user, isAuthenticated, isLoading, getAccessTokenSilently, logout } = useAuth0();
 
     const [ localUser, setLocalUser ] = useState<IUser | null>(null);
 
     useEffect(() => {
         getAccessTokenSilently()
         .then(t => {
+            console.log(t);
             getLocalUser(t)
             .then(u => { console.log(u); setLocalUser(u) })
         })

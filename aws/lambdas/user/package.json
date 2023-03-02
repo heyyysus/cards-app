@@ -1,0 +1,22 @@
+{
+  "name": "user",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx tsc && cd dist && zip -r ./lambda.zip ./* && cp ./lambda.zip ../aws_dist/lambda.zip && rm ./lambda.zip",
+    "deploy": "aws lambda update-function-code --function-name=getUser --zip-file fileb://aws_dist/lambda.zip"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-lambda": "^1.0.7",
+    "pg": "^8.9.0"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.111",
+    "@types/pg": "^8.6.6",
+    "typescript": "^4.9.5"
+  }
+}
