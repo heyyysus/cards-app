@@ -3,11 +3,19 @@ import db from "./db";
 import crypto from "crypto";
 
 export interface IUser {
-    user_id?: string,
+    user_id: string,
     username?: string,
     profile_img?: string,
     ts?: Date
 }
+
+export interface IPlan {
+    plan_id: number,
+    plan_name?: string,
+    plan_description?: string,
+    ts?: Date,
+    user: IUser,
+};
 
 export class UsernameAlreadyExistsError extends Error {};
 
@@ -59,4 +67,27 @@ export const getOrCreateByUserId = async (id: string): Promise<IUser> => {
     console.log(existingUser);
     if(existingUser) return existingUser;
     else return await createWithAutoUsername(id);
+}
+
+export const patchUser = async (updatedUser: IUser): Promise<IUser> => {
+    try {
+        const query = `UPDATE users SET username=$1 WHERE user_id=$2 RETURNING *`;
+        const result = await db.query(query, [updatedUser.username, updatedUser.user_id]);
+        return result.rows[0];
+    } catch(e){
+        console.log(e);
+        return null;
+    }
+}
+
+export const getUserPlans = async (id: string): Promise<IPlan[]> => {
+    try {
+        const query = `SELECT plan_id, plan_name, plan_description, user_id, ts FROM events 
+                        WHERE user_id=$1`;
+        const result = await db.query(query, [id]);
+        return result.rows;
+    } catch(e){
+        console.log(e);
+        return null;
+    }
 }

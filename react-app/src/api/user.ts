@@ -1,3 +1,4 @@
+import { useReducer } from "react";
 import { api } from "./api"
 import { IUser } from "./models/IUser";
 
@@ -44,6 +45,23 @@ export const getUserByUsername = async (username: string, token: string): Promis
             return null;
         }
     }catch(e){
+        console.log(e);
+        return null;
+    }
+}
+
+export const patchUser = async (user: IUser, token: string): Promise<IUser | null> => {
+    try {
+        const { patch } = api(token);
+        const response = await patch('user', user);
+        if(response.ok){
+            return response.json()
+        }
+        else {
+            console.log(response.statusText)
+            return null
+        }
+    } catch(e){
         console.log(e);
         return null;
     }
