@@ -9,7 +9,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useEffect, useState } from 'react';
 import { IUser } from '../api/models/IUser';
-import { getLocalUser } from '../api/auth';
+import { getLocalUser } from '../api/user';
 
 import Theme from "../utils/theme";
 

@@ -2,7 +2,7 @@ import { GetTokenSilentlyOptions, useAuth0 } from '@auth0/auth0-react';
 import { Avatar, Button, Chip } from '@mui/material';
 import { FC, useEffect, useState } from 'react';
 import { redirect } from 'react-router-dom';
-import { getLocalUser } from '../api/auth';
+import { getLocalUser } from '../api/user';
 import { IUser } from '../api/models/IUser';
 import { LoginButton } from '../components/LoginButton';
 import { ProfileCard } from '../components/ProfileCard';

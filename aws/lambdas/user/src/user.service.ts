@@ -19,7 +19,7 @@ export const fetchOneBy = async (key: string, value: string, fields: string[] = 
             values: [value]
         };
         const result = await db.query(query);
-        return result.rows.at(0);
+        return result.rows[0];
     } catch(e){
         console.log(e);
         return null;

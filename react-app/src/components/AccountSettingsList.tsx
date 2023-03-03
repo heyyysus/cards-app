@@ -10,28 +10,34 @@ import InboxIcon from '@mui/icons-material/Inbox';
 import DraftsIcon from '@mui/icons-material/Drafts';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useNavigate } from 'react-router-dom';
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { IUser } from '../api/models/IUser';
+import { UserProfileChip } from './UserProfileChip';
+import { getLocalUser } from '../api/user';
 
 export interface AccountSettingsListProps {
-    user: IUser
 };
 
-export const AccountSettingsList: FC<AccountSettingsListProps> = ({ user }) => {
-    const { logout} = useAuth0();
-    const navigate = useNavigate();
+export const AccountSettingsList: FC<AccountSettingsListProps> = () => {
+
+    const { user, isAuthenticated, isLoading, getAccessTokenSilently, logout } = useAuth0();
+    const [ localUser, setLocalUser ] = useState<IUser | null>(null);
+
+    useEffect(() => {
+        getAccessTokenSilently()
+        .then(t => {
+            console.log(t);
+            getLocalUser(t)
+            .then(u => { console.log(u); setLocalUser(u) })
+        })
+    }, [getAccessTokenSilently, user?.sub])
+
   return (
     <Box sx={{ bgcolor: 'background.paper' }}>
       <nav aria-label="main profile items">
+        <UserProfileChip user={localUser} />
         <List>
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <InboxIcon />
-              </ListItemIcon>
-              <ListItemText primary="Profile" onClick={() => navigate(`/profile/${user.username}`)} />
-            </ListItemButton>
-          </ListItem>
+          
           <ListItem disablePadding>
             <ListItemButton>
               <ListItemIcon>
@@ -42,6 +48,7 @@ export const AccountSettingsList: FC<AccountSettingsListProps> = ({ user }) => {
           </ListItem>
         </List>
       </nav>
+
       <Divider />
       <nav aria-label="secondary profile items">
         <List>

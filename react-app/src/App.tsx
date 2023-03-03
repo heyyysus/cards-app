@@ -13,6 +13,7 @@ import HomePage from './pages/Home';
 import LoadingPage from './pages/LoadingPage';
 import LandingPage from './pages/LandingPage';
 import AccountPage from './pages/Account';
+import Profile from './pages/Profile';
 
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
           <Switch>
             <Route path='/' element={<HomePage />} />
             <Route path='/account' element={<AccountPage />} />
+            <Route path='/user/:username' element={<Profile />} />
           </Switch>
           <FixedBottomNav />
         </Router>
