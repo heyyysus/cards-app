@@ -4,7 +4,7 @@ import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutl
 import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined';
 import { borderBottom, padding } from '@mui/system';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { IUser } from '../api/models/IUser';
 import { getLocalUser, getUserByUsername, patchUser } from '../api/user';
 import { UserProfileChip } from '../components/UserProfileChip';
@@ -13,6 +13,7 @@ import config from "../config.json";
 export default function Profile() {
     const { username } = useParams();
     const { user, getAccessTokenSilently } = useAuth0();
+    const navigate = useNavigate();
 
     const [ profileUser, setProfileUser ] = useState<IUser | null>(null);
     const [ editMode, setEditMode ] = useState(false);
@@ -26,7 +27,7 @@ export default function Profile() {
             let newUser = profileUser;
             newUser.username = formUsername;
             patchUser(newUser, accessToken)
-            .then(u => { setProfileUser(u); setEditMode(false) })
+            .then(u => { setProfileUser(u); setEditMode(false); navigate(`/user/${u?.username}`) })
         }
     }
 
