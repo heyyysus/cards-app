@@ -13,7 +13,6 @@
   "license": "ISC",
   "dependencies": {
     "aws-lambda": "^1.0.7",
-    "aws-lambda-router": "^0.11.0",
     "pg": "^8.9.0"
   },
   "devDependencies": {
