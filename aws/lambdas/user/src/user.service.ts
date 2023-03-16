@@ -1,6 +1,7 @@
 
 import db from "./db";
 import crypto from "crypto";
+import { QueryResult } from "pg";
 
 export interface IUser {
     user_id: string,
@@ -69,14 +70,14 @@ export const getOrCreateByUserId = async (id: string): Promise<IUser> => {
     else return await createWithAutoUsername(id);
 }
 
-export const patchUser = async (updatedUser: IUser): Promise<IUser> => {
+export const patchUser = async (updatedUser: IUser): Promise<any> => {
     try {
-        const query = `UPDATE users SET username=$1 WHERE user_id=$2 RETURNING *`;
-        const result = await db.query(query, [updatedUser.username, updatedUser.user_id]);
-        return result.rows[0];
+        const query = `UPDATE users SET username=$1, profile_img=$2 WHERE user_id=$3 RETURNING *`;
+        const result = await db.query(query, [updatedUser.username, updatedUser.profile_img, updatedUser.user_id]);
+        return result.rows[0] || result;
     } catch(e){
         console.log(e);
-        return null;
+        return e;
     }
 }
 

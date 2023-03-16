@@ -1,4 +1,4 @@
-import { Avatar, Backdrop, Card, TextField } from '@mui/material';
+import { Avatar, Backdrop, Card, InputAdornment, TextField } from '@mui/material';
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
 import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined';
 import { FC, useEffect, useState } from 'react';
@@ -10,7 +10,7 @@ import { ImageSelectionBox } from './ImageSelectionBox';
 export interface ProfilePageCardProps {
     profileUser: IUser,
     user?: User,
-    saveUserEdit: (newUser: IUser) => void;
+    saveUserEdit: (newUser: IUser, newProfileImageFile?: File) => void;
 };
 
 export const ProfilePageCard: FC<ProfilePageCardProps> =  ({ profileUser, user, saveUserEdit }) => {
@@ -18,15 +18,15 @@ export const ProfilePageCard: FC<ProfilePageCardProps> =  ({ profileUser, user, 
     const [ pictureEditMode, setPictureEditMode ] = useState(false);
     const [ formUsername, setFormUsername ] = useState("");
     const [ tempLocalProfileImage, setTempLocalProfileImage ] = useState<string | null>(null);
-    const [ formImage, setFormImage ] = useState<File | null>(null);
+    const [ formImage, setFormImage ] = useState<File | undefined>(undefined);
     const isLocalUser = profileUser?.user_id === user?.sub;
 
 
     const handleSaveEdit = () => {
-        if(formUsername !== profileUser?.username && profileUser){
+        if((formUsername !== profileUser?.username || formImage) && profileUser){
             let newUser = profileUser;
             newUser.username = formUsername;
-            saveUserEdit(newUser)
+            saveUserEdit(newUser, formImage)
         }
         setEditMode(false);
     }
@@ -78,7 +78,7 @@ export const ProfilePageCard: FC<ProfilePageCardProps> =  ({ profileUser, user, 
                     
                 </Backdrop>
                 
-                 <TextField 
+                <TextField 
                     id="username_field" 
                     label="Username" 
                     variant="standard" 
@@ -87,6 +87,9 @@ export const ProfilePageCard: FC<ProfilePageCardProps> =  ({ profileUser, user, 
                     margin='normal'
                     sx={{
                         width: '200px',
+                    }}
+                    InputProps={{
+                        startAdornment: <InputAdornment position='start' >@</InputAdornment>
                     }}
                 />
                 </>
@@ -98,7 +101,7 @@ export const ProfilePageCard: FC<ProfilePageCardProps> =  ({ profileUser, user, 
                     src={profileUser.profile_img || `${process.env.PUBLIC_URL}${config.DEFAULT_PROFILE_IMAGE}`}
                     sx={{ width: 100, height: 100, marginBottom: '20px' }}
                 />
-                <p>{profileUser.username}</p>
+                <p>@{profileUser.username}</p>
                 </>
             ) }
 

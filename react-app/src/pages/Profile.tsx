@@ -10,6 +10,7 @@ import { getLocalUser, getUserByUsername, patchUser } from '../api/user';
 import { UserProfileChip } from '../components/UserProfileChip';
 import config from "../config.json";
 import { ProfilePageCard } from '../components/ProfilePageCard';
+import { getProfileImageUploadUrl, uploadProfileImageFile } from '../api/image';
 
 export default function Profile() {
     const { username } = useParams();
@@ -25,10 +26,17 @@ export default function Profile() {
 
     
 
-    const saveUserEdit = (newUser: IUser) => {
-        if(accessToken)
-            patchUser(newUser, accessToken)
-                .then(u => { setProfileUser(u); navigate(`/user/${u?.username}`) })
+    const saveUserEdit = async (newUser: IUser, newProfileImageFile?: File) => {
+        let saveUser = newUser;
+        if(accessToken){
+            if(newProfileImageFile){
+                const filename = await uploadProfileImageFile(accessToken, newProfileImageFile);
+                saveUser.profile_img = encodeURI(`/images/profile/${filename}`);
+                console.log(saveUser);
+            }
+            patchUser(saveUser, accessToken)
+            .then(u => { setProfileUser(u); console.log(u); if(u?.username) navigate(`/user/${u?.username}`); })
+        }
     }
 
     useEffect(() => {
