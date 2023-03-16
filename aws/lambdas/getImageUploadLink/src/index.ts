@@ -1,7 +1,24 @@
 import { APIGatewayProxyResult } from "aws-lambda";
-import { APIEvent, RequestContext } from "./types";
+import { APIEvent, Context, RequestContext } from "./types";
 import { S3 } from "aws-sdk";
 import config from './config';
+
+const PRODUCTION = true;
+
+const cors = (a: any, origin: string) => {
+    return {
+        ... a,
+        headers: {
+            "Content-Type": "application/json",
+            'Access-Control-Allow-Origin': origin,
+            'Access-Control-Allow-Headers': "Authorization",
+            "Access-Control-Allow-Credentials": "true",
+            "Access-Control-Allow-Methods": "GET, POST, PATCH, DELETE, OPTIONS",
+            "Access-Control-Max-Age": "300",
+
+        },
+    };
+}
 
 class InvalidExtensionError extends Error {};
 
@@ -31,7 +48,7 @@ const createPresignedImageUploadUrl = async (user_id: string, extension: string)
   };
   
 
-export const handler = async (event: APIEvent, context: RequestContext): Promise<APIGatewayProxyResult> => {
+export const prehandler = async (event: APIEvent, context: Context): Promise<APIGatewayProxyResult> => {
     try {
         const method = event.requestContext.http.method;
         const sub = event.requestContext.authorizer.jwt.claims.sub;
@@ -58,5 +75,25 @@ export const handler = async (event: APIEvent, context: RequestContext): Promise
             statusCode: 500,
             body: "Internal Error"
         }
+    }
+}
+
+export const handler = async (event: APIEvent, context: Context): Promise<APIGatewayProxyResult> => {
+
+    try {
+
+        const allowed_origin = (PRODUCTION) ? `https://d29ba174zxs5ij.cloudfront.net` : 'http://169.231.185.82';
+        if(event.requestContext.http.method === "OPTIONS")
+            return cors({
+                statusCode: 200,
+                body: "",
+            }, allowed_origin);
+        
+        return cors(await prehandler(event, context), allowed_origin);
+    } catch (error) {
+        return {
+            statusCode: 500,
+            body: JSON.stringify({ error: error })
+        };
     }
 }

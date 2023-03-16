@@ -9,6 +9,7 @@ import { IUser } from '../api/models/IUser';
 import { getLocalUser, getUserByUsername, patchUser } from '../api/user';
 import { UserProfileChip } from '../components/UserProfileChip';
 import config from "../config.json";
+import { ProfilePageCard } from '../components/ProfilePageCard';
 
 export default function Profile() {
     const { username } = useParams();
@@ -22,13 +23,12 @@ export default function Profile() {
 
     const isLocalUser = profileUser?.user_id === user?.sub;
 
-    const handleSaveEdit = () => {
-        if(formUsername !== profileUser?.username && profileUser && accessToken){
-            let newUser = profileUser;
-            newUser.username = formUsername;
+    
+
+    const saveUserEdit = (newUser: IUser) => {
+        if(accessToken)
             patchUser(newUser, accessToken)
-            .then(u => { setProfileUser(u); setEditMode(false); navigate(`/user/${u?.username}`) })
-        }
+                .then(u => { setProfileUser(u); navigate(`/user/${u?.username}`) })
     }
 
     useEffect(() => {
@@ -53,53 +53,7 @@ export default function Profile() {
     }
     else {
         return (
-            <Card variant='outlined' sx={{
-                padding: '20px',
-                display: 'flex',
-                flexDirection: 'column',
-            }}>
-                <Avatar
-                    alt={profileUser.username}
-                    src={profileUser.profile_img || `${process.env.PUBLIC_URL}${config.DEFAULT_PROFILE_IMAGE}`}
-                    sx={{ width: 100, height: 100, marginBottom: '20px' }}
-                />
-                {(editMode) ? (
-                    <TextField 
-                        id="username_field" 
-                        label="Username" 
-                        variant="standard" 
-                        value={formUsername} 
-                        onChange={ (e) => setFormUsername(e.target.value) }
-                        margin='normal'
-                        sx={{
-                            maxWidth: '15vw',
-                        }}
-                    />
-                ) : (
-                    <p>{profileUser.username}</p>
-                ) }
-
-                {(isLocalUser && !editMode) ? 
-                (<ModeEditOutlineOutlinedIcon 
-                    color='primary'
-                    onClick={(e) => { setEditMode(true) }}
-                    sx={{
-                        ':hover': {
-                            cursor: 'pointer'
-                        }
-                    }}
-                />) : 
-                (<></>)}
-                
-                {(isLocalUser && editMode) ? (
-                    <CheckOutlinedIcon onClick={(e) => { handleSaveEdit() }} sx={{
-                        ':hover': {
-                            cursor: 'pointer'
-                        }
-                    }} />
-                ) : (<></>)}
-
-            </Card>
+            <ProfilePageCard user={user} profileUser={profileUser} saveUserEdit={saveUserEdit} />
         );
     }
 }

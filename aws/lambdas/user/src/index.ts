@@ -3,6 +3,8 @@ import { Pool } from 'pg';
 import { APIEvent, Context } from './types';
 import { createWithAutoUsername, fetchOneBy, getUserPlans, patchUser } from './user.service';
 
+const PRODUCTION = true;
+
 const pool = new Pool({
     host: "group-study-ucsb-dev.c8nxscgmv2nn.us-west-2.rds.amazonaws.com",
     port: 5432,
@@ -133,7 +135,8 @@ const prehandler = async (event: APIEvent, context: Context): Promise<APIGateway
 export const handler = async (event: APIEvent, context: Context): Promise<APIGatewayProxyResult> => {
 
     try {
-        const allowed_origin = `https://d29ba174zxs5ij.cloudfront.net`;
+    
+        const allowed_origin = (PRODUCTION) ? `https://d29ba174zxs5ij.cloudfront.net` : 'http://localhost:3000';
         if(event.requestContext.http.method === "OPTIONS")
             return cors({
                 statusCode: 200,
