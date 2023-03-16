@@ -5,6 +5,7 @@ export interface IUser {
     email?: string,
     username?: string,
     profile_img?: string,
+    bio?: string,
     auth?: auth_role,
     ts?: Date,
 }

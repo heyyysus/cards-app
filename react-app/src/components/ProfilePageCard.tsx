@@ -17,15 +17,17 @@ export const ProfilePageCard: FC<ProfilePageCardProps> =  ({ profileUser, user, 
     const [ editMode, setEditMode ] = useState(false);
     const [ pictureEditMode, setPictureEditMode ] = useState(false);
     const [ formUsername, setFormUsername ] = useState("");
+    const [ formBio, setFormBio] = useState("");
     const [ tempLocalProfileImage, setTempLocalProfileImage ] = useState<string | null>(null);
     const [ formImage, setFormImage ] = useState<File | undefined>(undefined);
     const isLocalUser = profileUser?.user_id === user?.sub;
 
 
     const handleSaveEdit = () => {
-        if((formUsername !== profileUser?.username || formImage) && profileUser){
+        if((formUsername !== profileUser?.username || formBio !== profileUser.bio || formImage) && profileUser){
             let newUser = profileUser;
             newUser.username = formUsername;
+            newUser.bio = formBio;
             saveUserEdit(newUser, formImage)
         }
         setEditMode(false);
@@ -39,6 +41,7 @@ export const ProfilePageCard: FC<ProfilePageCardProps> =  ({ profileUser, user, 
 
     useEffect(() => {
         setFormUsername(profileUser.username || "")
+        setFormBio(profileUser.bio || "")
     }, []);
 
     return (
@@ -92,6 +95,23 @@ export const ProfilePageCard: FC<ProfilePageCardProps> =  ({ profileUser, user, 
                         startAdornment: <InputAdornment position='start' >@</InputAdornment>
                     }}
                 />
+
+                <TextField
+                    id="user_bio_field"
+                    label="Bio"
+                    variant="standard"
+                    value={formBio}
+                    onChange={ (e) => setFormBio(e.target.value) }
+                    margin='normal'
+                    sx={{
+                        minWidth: '400px',
+                        width: '70vw'
+                    }}
+                    multiline
+                    minRows={3}
+                    maxRows={6}
+                />
+
                 </>
                
             ) : (
@@ -102,6 +122,7 @@ export const ProfilePageCard: FC<ProfilePageCardProps> =  ({ profileUser, user, 
                     sx={{ width: 100, height: 100, marginBottom: '20px' }}
                 />
                 <p>@{profileUser.username}</p>
+                <p><b>Bio: </b>{profileUser.bio}</p>
                 </>
             ) }
 

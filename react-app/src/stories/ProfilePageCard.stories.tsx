@@ -10,7 +10,7 @@ import { ThemeProvider } from '@mui/material';
 import "../index.css";
 
 export default {
-  title: 'Hoppi /ProfilePageCard',
+  title: 'Hoppin/ProfilePageCard',
   component: ProfilePageCard,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {
@@ -29,15 +29,12 @@ const user: User = {
 const profileUser: IUser = {
   user_id: '1',
   profile_img: undefined,
-  username: 'Username',
+  username: 'TroyTheBoy',
+  bio: "Yo what the fuck is up my name is Troy and I like to fuckign party",
 }
 
 const saveUserEdit = (newUser: IUser) => {
   console.log(newUser);
-}
-
-const handleSubmit = (file: File) => {
-  console.log(file);
 }
 
 
