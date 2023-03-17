@@ -1,7 +1,7 @@
 import { APIGatewayProxyCallback, APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { Pool } from 'pg';
 import { APIEvent, Context } from './types';
-import { createWithAutoUsername, fetchOneBy, getUserPlans, patchUser } from './user.service';
+import { createWithAutoUsername, fetchAll, fetchOneBy, getUserPlans, patchUser } from './user.service';
 
 const PRODUCTION = true;
 
@@ -45,7 +45,8 @@ const getAuthorizedUser = async (event: APIEvent, context: Context): Promise<API
 
         return {
             statusCode: 200,
-            body: JSON.stringify(user),
+            //body: JSON.stringify(user),
+            body: JSON.stringify(await fetchOneBy('user_id', user.user_id)),
         }
 
     } catch (error) {
@@ -64,6 +65,7 @@ const user_handler = async (event: APIEvent, context: Context) => {
         case "GET":
             const username = event.queryStringParameters?.username || undefined;
             const user_id = event.queryStringParameters?.user_id || undefined;
+            const searchQuery = event.queryStringParameters?.searchQuery || undefined;
             if(username)
                 return {
                     statusCode: 200,
@@ -75,6 +77,12 @@ const user_handler = async (event: APIEvent, context: Context) => {
                     statusCode: 200,
                     body: JSON.stringify(await fetchOneBy('user_id', user_id)),
                 };
+            else if(searchQuery){
+                return { 
+                    statusCode: 200,
+                    body: JSON.stringify(await fetchAll()),
+                 };
+            }
             else
                 return await getAuthorizedUser(event, context);
         

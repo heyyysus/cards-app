@@ -2,12 +2,16 @@
 import db from "./db";
 import crypto from "crypto";
 import { QueryResult } from "pg";
+import pool from "./db";
 
 export interface IUser {
     user_id: string,
     username?: string,
     profile_img?: string,
+    bio?: string,
     ts?: Date
+    following?: IUser[],
+    followers?: IUser[],
 }
 
 export interface IPlan {
@@ -21,22 +25,70 @@ export interface IPlan {
 export class UsernameAlreadyExistsError extends Error {};
 
 export const fetchOneBy = async (key: string, value: string, fields: string[] = ['*']): Promise<IUser> => {
+    const fieldsString: string = fields.reduce((a, b) => `${a}, ${b}`);
     try {
-        const fieldsString: string = fields.reduce((a, b) => `${a}, ${b}`);
         const query = {
             text: `SELECT ${fieldsString} FROM users WHERE ${key}=$1`,
             values: [value]
         };
         const result = await db.query(query);
-        return result.rows[0];
+        let fetchedUser: IUser = result.rows[0];
+        if (!fetchedUser) return null;
+        fetchedUser.followers = await fetchFollowers(fetchedUser.user_id);
+        fetchedUser.following = await fetchFollowing(fetchedUser.user_id);
+        return fetchedUser;
     } catch(e){
         console.log(e);
-        return null;
+        return e;
+    }
+}
+
+export const fetchAll = async (fields: string[] = ['*']): Promise<IUser[]> => {
+    const fieldsString: string = fields.reduce((a, b) => `${a}, ${b}`);
+    try {
+        const query = `SELECT ${fieldsString} FROM users`
+        const result = await db.query(query);
+        return result.rows;
+    } catch(e){
+        console.log(e);
+        return e;
+    }
+}
+
+export const fetchFollowers = async (user_id: string): Promise<IUser[]> => {
+    try {
+        const query = {
+            text: `SELECT u.user_id, u.username, u.bio, u.profile_img, u.ts 
+                    FROM users_following_users AS f INNER JOIN users AS u 
+                    ON u.user_id=f.fk_follower WHERE fk_following=$1`,
+            values: [user_id]
+        };
+        const result = await pool.query(query);
+        return result.rows;
+    } catch(e) {
+        console.log(e);
+        return e;
+    }
+}
+
+export const fetchFollowing = async (user_id: string): Promise<IUser[]> => {
+    try {
+        const query = {
+            text: `SELECT u.user_id, u.username, u.bio, u.profile_img, u.ts 
+                    FROM users_following_users AS f INNER JOIN users AS u 
+                    ON u.user_id=f.fk_following WHERE fk_follower=$1`,
+            values: [user_id]
+        };
+        const result = await pool.query(query);
+        return result.rows;
+    } catch(e) {
+        console.log(e);
+        return e;
     }
 }
 
 export const create = async (newUser: IUser): Promise<IUser> => {
-    const usernameCheck = await fetchOneBy('username', newUser.username, ['user_id'])
+    const usernameCheck = await fetchOneBy('username', newUser.username)
     if(usernameCheck) throw new UsernameAlreadyExistsError;
     try {
         const insertQuery = {
@@ -55,7 +107,7 @@ export const createWithAutoUsername = async (id: string): Promise<IUser> => {
     let username = "";
     do {
         username = `user_${crypto.randomInt(100000000)}`;
-    } while (await fetchOneBy('username', username, ['user_id']))
+    } while (await fetchOneBy('username', username))
     const newUser: IUser = {
         user_id: id,
         username: username
@@ -64,7 +116,7 @@ export const createWithAutoUsername = async (id: string): Promise<IUser> => {
 }
 
 export const getOrCreateByUserId = async (id: string): Promise<IUser> => {
-    const existingUser = await fetchOneBy('user_id', id, ['*']);
+    const existingUser = await fetchOneBy('user_id', id);
     console.log(existingUser);
     if(existingUser) return existingUser;
     else return await createWithAutoUsername(id);
@@ -72,8 +124,13 @@ export const getOrCreateByUserId = async (id: string): Promise<IUser> => {
 
 export const patchUser = async (updatedUser: IUser): Promise<any> => {
     try {
-        const query = `UPDATE users SET username=$1, profile_img=$2 WHERE user_id=$3 RETURNING *`;
-        const result = await db.query(query, [updatedUser.username, updatedUser.profile_img, updatedUser.user_id]);
+        const query = `UPDATE users SET username=$1, profile_img=$2, bio=$3 WHERE user_id=$4 RETURNING *`;
+        const result = await db.query(query, [
+            updatedUser.username, 
+            updatedUser.profile_img, 
+            updatedUser.bio || null,  
+            updatedUser.user_id
+        ]);
         return result.rows[0] || result;
     } catch(e){
         console.log(e);
