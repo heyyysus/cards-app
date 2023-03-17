@@ -1,16 +1,11 @@
 import { APIGatewayProxyCallback, APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { Pool } from 'pg';
+import pool from './db';
 import { APIEvent, Context } from './types';
-import { actOnUser, createWithAutoUsername, fetchAll, fetchOneBy, getUserPlans, patchUser } from './user.service';
+import { actOnUser, createWithAutoUsername, fetchAll, fetchOneBy, patchUser } from './user.service';
 
 const PRODUCTION = true;
 
-const pool = new Pool({
-    host: "group-study-ucsb-dev.c8nxscgmv2nn.us-west-2.rds.amazonaws.com",
-    port: 5432,
-    user: "postgres",
-    password: "RPloa9Wa04gkcmtHFwWFl",
-});
 
 const cors = (a: any, origin: string) => {
     return {
@@ -129,35 +124,11 @@ const user_handler = async (event: APIEvent, context: Context) => {
     }
 }
 
-const plans_handler = async (event: APIEvent, context: Context): Promise<APIGatewayProxyResult> => {
-    const claims = event.requestContext.authorizer?.jwt?.claims;
-    
-    switch(event.requestContext.http.method){
-        case "GET":
-            const user_id = event.queryStringParameters?.user_id || undefined;
-            const userPlans = await getUserPlans(claims.sub);
-            return {
-                statusCode: 200,
-                body: JSON.stringify(userPlans),
-            };
-    }
-
-}
-
 
 const prehandler = async (event: APIEvent, context: Context): Promise<APIGatewayProxyResult> => {
 
     const path = event.requestContext.http.path;
-
-    switch(path){
-        case "/user":
-            return user_handler(event, context);
-        case "/plans":
-            return plans_handler(event, context);
-    }
-
-    
-
+    return user_handler(event, context);
 }
 
 export const handler = async (event: APIEvent, context: Context): Promise<APIGatewayProxyResult> => {

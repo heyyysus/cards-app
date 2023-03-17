@@ -14,14 +14,6 @@ export interface IUser {
     followers?: IUser[],
 }
 
-export interface IPlan {
-    plan_id: number,
-    plan_name?: string,
-    plan_description?: string,
-    ts?: Date,
-    user: IUser,
-};
-
 export class UsernameAlreadyExistsError extends Error {};
 
 export const fetchOneBy = async (key: string, value: string, fields: string[] = ['*']): Promise<IUser> => {
@@ -165,17 +157,5 @@ export const patchUser = async (updatedUser: IUser): Promise<any> => {
     } catch(e){
         console.log(e);
         return e;
-    }
-}
-
-export const getUserPlans = async (id: string): Promise<IPlan[]> => {
-    try {
-        const query = `SELECT plan_id, plan_name, plan_description, user_id, ts FROM events 
-                        WHERE user_id=$1`;
-        const result = await db.query(query, [id]);
-        return result.rows;
-    } catch(e){
-        console.log(e);
-        return null;
     }
 }
