@@ -7,5 +7,7 @@ export interface IUser {
     profile_img?: string,
     bio?: string,
     auth?: auth_role,
+    following?: IUser[],
+    followers?: IUser[],
     ts?: Date,
 }
