@@ -21,10 +21,10 @@ export default function Profile() {
     const [ editMode, setEditMode ] = useState(false);
     const [ formUsername, setFormUsername ] = useState("");
     const [ accessToken, setAccessToken ] = useState<string | null>(null);
-
+    const [ localUser, setLocalUser ] = useState<IUser | null>(null);
     const isLocalUser = profileUser?.user_id === user?.sub;
 
-    
+
 
     const saveUserEdit = async (newUser: IUser, newProfileImageFile?: File) => {
         let saveUser = newUser;
@@ -43,25 +43,28 @@ export default function Profile() {
         getAccessTokenSilently()
         .then(t => {
             setAccessToken(t);
+            getLocalUser(t)
+                .then(u => setLocalUser(u))
+            
             const userPromise = (username) ? 
                 getUserByUsername(username, t) :
                 getLocalUser(t)
 
             userPromise.then(u => { setProfileUser(u) })
         })
-    }, [user])
+    }, [user, username])
 
     useEffect(() => {
         if(profileUser?.username)
             setFormUsername(profileUser?.username)
     }, [profileUser?.username])
 
-    if(!profileUser){
+    if(!profileUser || !localUser){
         return(<p>Loading ...</p>)
     }
     else {
         return (
-            <ProfilePageCard user={user} profileUser={profileUser} saveUserEdit={saveUserEdit} />
+            <ProfilePageCard localUser={localUser} user={user} profileUser={profileUser} saveUserEdit={saveUserEdit} />
         );
     }
 }
