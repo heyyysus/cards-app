@@ -14,9 +14,10 @@ export interface ProfilePageCardProps {
     user?: User,
     localUser: IUser,
     saveUserEdit: (newUser: IUser, newProfileImageFile?: File) => void;
+    handleUserAction: (user_id: string, action: string) => void,
 };
 
-export const ProfilePageCard: FC<ProfilePageCardProps> =  ({ profileUser, user, saveUserEdit, localUser }) => {
+export const ProfilePageCard: FC<ProfilePageCardProps> =  ({ profileUser, user, saveUserEdit, localUser, handleUserAction }) => {
     const [ editMode, setEditMode ] = useState(false);
     const [ pictureEditMode, setPictureEditMode ] = useState(false);
     const [ showBiFollowList, setShowBiFollowList ] = useState(false);
@@ -79,6 +80,7 @@ export const ProfilePageCard: FC<ProfilePageCardProps> =  ({ profileUser, user, 
                     followingList={profileUser.following || []} 
                     handleExit={() => setShowBiFollowList(false)}
                     initialTab={initBiFollowListVal}
+                    handleUserAction={handleUserAction}
                 />
                 
             </Backdrop>
@@ -109,12 +111,12 @@ export const ProfilePageCard: FC<ProfilePageCardProps> =  ({ profileUser, user, 
                     width: '25%',
                     justifyContent: 'space-between'
                 }}>
-                    <ButtonBase onClick={() => {setInitBiFollowListVal(0); setShowBiFollowList(true)}}>
+                    <ButtonBase onClick={() => {setInitBiFollowListVal(0); setShowBiFollowList(true); setEditMode(false);}}>
                         <p><b>{profileUser.following?.length}</b> Following</p>
                     </ButtonBase>
 
-                    <ButtonBase onClick={() => {setInitBiFollowListVal(1); setShowBiFollowList(true)}}>
-                        <p><b>{profileUser.following?.length}</b> Followers</p>
+                    <ButtonBase onClick={() => {setInitBiFollowListVal(1); setShowBiFollowList(true); setEditMode(false);}}>
+                        <p><b>{profileUser.followers?.length}</b> Followers</p>
                     </ButtonBase>
                 </div>
                 
@@ -164,12 +166,12 @@ export const ProfilePageCard: FC<ProfilePageCardProps> =  ({ profileUser, user, 
                     width: '25%',
                     justifyContent: 'space-between'
                 }}>
-                    <ButtonBase onClick={() => {setInitBiFollowListVal(0); setShowBiFollowList(true)}}>
+                    <ButtonBase onClick={() => {setInitBiFollowListVal(0); setShowBiFollowList(true); setEditMode(false);}}>
                         <p><b>{profileUser.following?.length}</b> Following</p>
                     </ButtonBase>
 
-                    <ButtonBase onClick={() => {setInitBiFollowListVal(1); setShowBiFollowList(true)}}>
-                        <p><b>{profileUser.following?.length}</b> Followers</p>
+                    <ButtonBase onClick={() => {setInitBiFollowListVal(1); setShowBiFollowList(true); setEditMode(false);}}>
+                        <p><b>{profileUser.followers?.length}</b> Followers</p>
                     </ButtonBase>
                 </div>
                 <p>@{profileUser.username}</p>

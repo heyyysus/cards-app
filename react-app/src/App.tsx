@@ -14,6 +14,7 @@ import LoadingPage from './pages/LoadingPage';
 import LandingPage from './pages/LandingPage';
 import AccountPage from './pages/Account';
 import Profile from './pages/Profile';
+import ExplorePage from './pages/Explore';
 
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
             <Route path='/' element={<HomePage />} />
             <Route path='/account' element={<AccountPage />} />
             <Route path='/user/:username' element={<Profile />} />
+            <Route path='/explore' element={<ExplorePage/>} />
           </Switch>
           <FixedBottomNav />
         </Router>

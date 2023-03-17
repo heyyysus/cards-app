@@ -1,5 +1,5 @@
 import { Button, Paper, Tab, Tabs } from '@mui/material';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { IUser } from '../api/models/IUser';
 import { UserList } from './UserList';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -11,16 +11,18 @@ export interface BiFollowListProps {
     followersList: IUser[]
     initialTab?: number,
     handleExit: () => void,
+    handleUserAction: (user_id: string, action: string) => void,
 };
 
-export const BiFollowList: FC<BiFollowListProps> =  ({localUser, initialTab, followingList, followersList, handleExit}) => {
+export const BiFollowList: FC<BiFollowListProps> =  ({localUser, initialTab, followingList, followersList, handleExit, handleUserAction}) => {
     const [ selectedTab, setSelectedTab ] = useState(initialTab || 0);
+    useEffect(() => { if(initialTab) setSelectedTab(initialTab) }, [initialTab])
     return (
     <Paper elevation={3} sx={{
         padding: '15px',
         display: 'flex',
         flexDirection: 'column',
-        minWidth: '500px',
+        minWidth: '350px',
         overflowY: 'scroll',
         maxHeight: '75vh',
         position: 'absolute',
@@ -49,9 +51,9 @@ export const BiFollowList: FC<BiFollowListProps> =  ({localUser, initialTab, fol
             <Tab value={1} label="Followers" />
         </Tabs>
         { (selectedTab === 0) ? 
-            <UserList handleExit={handleExit} localUser={localUser} userList={followingList} />
+            <UserList handleUserAction={handleUserAction} handleExit={handleExit} localUser={localUser} userList={followingList} />
             :
-            <UserList handleExit={handleExit} localUser={localUser} userList={followersList} />
+            <UserList handleUserAction={handleUserAction} handleExit={handleExit} localUser={localUser} userList={followersList} />
 
         }
     </Paper>)

@@ -6,7 +6,7 @@ import { borderBottom, padding } from '@mui/system';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { IUser } from '../api/models/IUser';
-import { getLocalUser, getUserByUsername, patchUser } from '../api/user';
+import { getLocalUser, getUserByUsername, patchUser, submitUserAction } from '../api/user';
 import { UserProfileChip } from '../components/UserProfileChip';
 import config from "../config.json";
 import { ProfilePageCard } from '../components/ProfilePageCard';
@@ -39,7 +39,14 @@ export default function Profile() {
         }
     }
 
-    useEffect(() => {
+    const handleUserAction = async (user_id: string, action: string) => {
+        if(accessToken) {
+            const result = await submitUserAction(accessToken, user_id, action);
+            if(result) reloadLocalAndProfileUser();
+        }
+    }
+
+    const reloadLocalAndProfileUser = () => {
         getAccessTokenSilently()
         .then(t => {
             setAccessToken(t);
@@ -52,6 +59,10 @@ export default function Profile() {
 
             userPromise.then(u => { setProfileUser(u) })
         })
+    }
+
+    useEffect(() => {
+        reloadLocalAndProfileUser();
     }, [user, username])
 
     useEffect(() => {
@@ -64,7 +75,7 @@ export default function Profile() {
     }
     else {
         return (
-            <ProfilePageCard localUser={localUser} user={user} profileUser={profileUser} saveUserEdit={saveUserEdit} />
+            <ProfilePageCard handleUserAction={handleUserAction} localUser={localUser} user={user} profileUser={profileUser} saveUserEdit={saveUserEdit} />
         );
     }
 }

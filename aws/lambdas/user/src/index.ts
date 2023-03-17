@@ -1,7 +1,7 @@
 import { APIGatewayProxyCallback, APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { Pool } from 'pg';
 import { APIEvent, Context } from './types';
-import { createWithAutoUsername, fetchAll, fetchOneBy, getUserPlans, patchUser } from './user.service';
+import { actOnUser, createWithAutoUsername, fetchAll, fetchOneBy, getUserPlans, patchUser } from './user.service';
 
 const PRODUCTION = true;
 
@@ -60,12 +60,15 @@ const getAuthorizedUser = async (event: APIEvent, context: Context): Promise<API
 
 const user_handler = async (event: APIEvent, context: Context) => {
     const claims = event.requestContext.authorizer?.jwt?.claims;
+
+    const username = event.queryStringParameters?.username || undefined;
+    const user_id = event.queryStringParameters?.user_id || undefined;
+    const searchQuery = event.queryStringParameters?.searchQuery || undefined;
+    const action = event.queryStringParameters?.action || null;
     
     switch(event.requestContext.http.method){
         case "GET":
-            const username = event.queryStringParameters?.username || undefined;
-            const user_id = event.queryStringParameters?.user_id || undefined;
-            const searchQuery = event.queryStringParameters?.searchQuery || undefined;
+            
             if(username)
                 return {
                     statusCode: 200,
@@ -85,7 +88,7 @@ const user_handler = async (event: APIEvent, context: Context) => {
             }
             else
                 return await getAuthorizedUser(event, context);
-        
+            break;
         case "PATCH":
             const user = JSON.parse(event.body);
             if(user && user.user_id && user.username){
@@ -104,6 +107,23 @@ const user_handler = async (event: APIEvent, context: Context) => {
                     statusCode: 400,
                     body: "user_id and username required"
                 };
+            break;
+        case "POST":
+            if(!action || !user_id) return {
+                statusCode: 400,
+                body: "Missing Params"
+            }
+            else if(action === 'follow' || action === 'unfollow') {
+                return {
+                    statusCode: 200,
+                    body: JSON.stringify(await actOnUser(user_id, claims.sub, action))
+                };
+            } else {
+                return {
+                    statusCode: 400,
+                    body: "Invalid params"
+                };
+            }
         default: 
             return { statusCode: 404, body: "Not found" };
     }

@@ -1,19 +1,21 @@
 import { Avatar, Button, ButtonBase, List, ListItem, ListItemAvatar, ListItemText, Typography } from '@mui/material';
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { IUser } from '../api/models/IUser';
 import config from "../config.json";
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import PersonRemoveAlt1OutlinedIcon from '@mui/icons-material/PersonRemoveAlt1Outlined';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth0 } from '@auth0/auth0-react';
 
 export interface UserListItemProps {
     user: IUser,
     localUserfollows: boolean, 
     followsLocalUser: boolean,
-    handleExit: () => void,
+    handleExit?: () => void,
+    handleUserAction: (user_id: string, action: string) => void,
 };
 
-export const UserListItem: FC<UserListItemProps> = ({ user, localUserfollows, followsLocalUser, handleExit }) => {
+export const UserListItem: FC<UserListItemProps> = ({ user, localUserfollows, followsLocalUser, handleExit, handleUserAction }) => {
     const navigate = useNavigate();
 
     return (
@@ -23,15 +25,30 @@ export const UserListItem: FC<UserListItemProps> = ({ user, localUserfollows, fo
             <>
             {(localUserfollows) 
             ?
-            <Button variant='outlined' color='error'  size='small'>Unfollow</Button>
+            <Button 
+                variant='outlined' 
+                color='error'  
+                size='small'
+                onClick={() => handleUserAction(user.user_id, 'unfollow')}
+                >
+                Unfollow
+            </Button>
             :
-            <Button variant='outlined' color='primary' size='small'>Follow</Button>}
+            <Button 
+                variant='outlined' 
+                color='primary'  
+                size='small'
+                onClick={() => handleUserAction(user.user_id, 'follow')}
+                >
+                Follow
+            </Button>
+            }
             </>
           }
         sx={{
 
         }}>
-        <ButtonBase onClick={ () => { handleExit(); navigate(`/user/${user.username}`) } }>
+        <ButtonBase onClick={ () => { if(handleExit) handleExit(); navigate(`/user/${user.username}`) } }>
             <ListItemAvatar>
             <Avatar alt="Remy Sharp" src={user.profile_img || `${process.env.PUBLIC_URL}${config.DEFAULT_PROFILE_IMAGE}`} />
             </ListItemAvatar>
@@ -46,10 +63,12 @@ export const UserListItem: FC<UserListItemProps> = ({ user, localUserfollows, fo
 export interface UserListProps {
     localUser: IUser,
     userList: IUser[],
-    handleExit: () => void,
+    handleExit?: () => void,
+    handleUserAction: (user_id: string, action: string) => void,
 };
 
-export const UserList: FC<UserListProps> =  ({ localUser, userList, handleExit }) => {
+export const UserList: FC<UserListProps> =  ({ localUser, userList, handleExit, handleUserAction }) => {
+
     return (
     <List
     sx={{
@@ -63,6 +82,7 @@ export const UserList: FC<UserListProps> =  ({ localUser, userList, handleExit }
                     handleExit={handleExit} user={u} 
                     localUserfollows={localUserfollows} 
                     followsLocalUser={followsLocalUser} 
+                    handleUserAction={handleUserAction}
                 />;
         })
     }

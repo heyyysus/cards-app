@@ -87,6 +87,36 @@ export const fetchFollowing = async (user_id: string): Promise<IUser[]> => {
     }
 }
 
+export const actOnUser  = async (user_id: string, sub: string, action: 'follow' | 'unfollow'): Promise<IUser> => {
+    try {
+        if(action === 'follow'){
+            const checkFollowQuery = {
+                text: `SELECT * FROM users_following_users WHERE fk_follower=$1 AND fk_following=$2`,
+                values: [sub, user_id]
+            };
+            const checkFollowResult = await pool.query(checkFollowQuery);
+            if(checkFollowResult.rowCount === 0){
+                const insertFollowQuery = {
+                    text: `INSERT INTO users_following_users (fk_follower, fk_following) VALUES ($1, $2)`,
+                    values: [sub, user_id],
+                };
+                await pool.query(insertFollowQuery);
+            }
+            return await fetchOneBy('user_id', user_id);
+        } else if (action === 'unfollow') {
+            const query = {
+                text: `DELETE FROM users_following_users WHERE fk_follower=$1 AND fk_following=$2`,
+                values: [sub, user_id]
+            }
+            await pool.query(query);
+            return await fetchOneBy('user_id', user_id);
+        }
+    } catch (e) {
+        console.log(e);
+        return null;
+    }
+}
+
 export const create = async (newUser: IUser): Promise<IUser> => {
     const usernameCheck = await fetchOneBy('username', newUser.username)
     if(usernameCheck) throw new UsernameAlreadyExistsError;
