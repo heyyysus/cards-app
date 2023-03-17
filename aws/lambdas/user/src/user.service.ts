@@ -153,7 +153,9 @@ export const patchUser = async (updatedUser: IUser): Promise<any> => {
             updatedUser.bio || null,  
             updatedUser.user_id
         ]);
-        return result.rows[0] || result;
+        let patchedUser: IUser = result.rows[0]
+        if(!patchedUser) return null;
+        return await fetchOneBy('user_id', patchedUser.user_id);
     } catch(e){
         console.log(e);
         return e;
