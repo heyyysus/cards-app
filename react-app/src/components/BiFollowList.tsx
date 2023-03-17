@@ -16,7 +16,7 @@ export interface BiFollowListProps {
 
 export const BiFollowList: FC<BiFollowListProps> =  ({localUser, initialTab, followingList, followersList, handleExit, handleUserAction}) => {
     const [ selectedTab, setSelectedTab ] = useState(initialTab || 0);
-    useEffect(() => { if(initialTab) setSelectedTab(initialTab) }, [initialTab])
+    useEffect(() => { if(initialTab !== undefined) setSelectedTab(initialTab) }, [initialTab])
     return (
     <Paper elevation={3} sx={{
         padding: '15px',
