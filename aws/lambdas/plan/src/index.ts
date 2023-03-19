@@ -1,5 +1,5 @@
 import { APIGatewayProxyResult } from "aws-lambda";
-import { createPlan, getPlanById, getUserPlans } from "./plan.service";
+import { createPlan, getAllPlans, getPlanById, getUserPlans } from "./plan.service";
 import { APIEvent, Context } from "./types";
 
 
@@ -19,7 +19,7 @@ const cors = (a: any, origin: string) => {
 }
 
 const plans_handler = async (event: APIEvent, context: Context): Promise <APIGatewayProxyResult> => {
-    const claims = event.requestContext.authorizer.jwt.claims;
+    const claims = event.requestContext.authorizer?.jwt?.claims || undefined;
     const plan_id = event.queryStringParameters?.plan_id || undefined;
     const user_id = event.queryStringParameters?.user_id || undefined;
     const action = event.queryStringParameters?.action || undefined;
@@ -39,6 +39,10 @@ const plans_handler = async (event: APIEvent, context: Context): Promise <APIGat
                 statusCode: 200,
                 body: JSON.stringify(await getUserPlans(user_id))
             };
+            else return {
+                statusCode: 200,
+                body: JSON.stringify(await getAllPlans())
+            }
         case "POST": 
             if(action) {
                 return {
@@ -57,6 +61,6 @@ const plans_handler = async (event: APIEvent, context: Context): Promise <APIGat
 
 export const handler = async (event: APIEvent, context: Context): Promise<APIGatewayProxyResult> => {
     const allowed_origin: string = "https://d29ba174zxs5ij.cloudfront.net";
-    return cors(plans_handler, allowed_origin);
+    return cors(await plans_handler(event, context), allowed_origin);
 }
 

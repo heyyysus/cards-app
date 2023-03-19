@@ -29,7 +29,7 @@ export interface PlansFeedItemProps {
 export const PlansFeedItem: FC<PlansFeedItemProps> =  ({ planItem }) => {
     return (
     <>
-    <Card sx={{ maxWidth: 345, marginBottom: '50px' }}>
+    <Card sx={{ width: '100%', marginBottom: '50px' }}>
       <CardHeader
         avatar={
           <Avatar alt={planItem.author?.username}

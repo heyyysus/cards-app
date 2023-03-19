@@ -13,6 +13,9 @@ import config from '../config.json';
 
 import Styles from './Home.module.css';
 import { PlansForm } from '../components/PlansForm';
+import { PlansFeed } from '../components/PlansFeed';
+import { IPlan } from '../api/models/IPlan';
+import { getAllPlans } from '../api/plan';
 
 export interface HomePageProps {};
 
@@ -20,13 +23,20 @@ const HomePage: FC<HomePageProps> = ({  }) => {
     const { user, getAccessTokenSilently } = useAuth0();
     const [ localUser, setLocalUser ] = useState<IUser | null>(null);
     const [ showPlansForm, setShowPlansForm ] = useState(false);
+    const [ plansFeed, setPlansFeed ] = useState<IPlan[]>([])
 
-    useEffect(() => {
+    const reloadFeed = () => {
         getAccessTokenSilently()
         .then(t => {
             getLocalUser(t)
                 .then(u => setLocalUser(u))
+            getAllPlans(t)
+                .then(f => setPlansFeed(f))
         })
+    }
+
+    useEffect(() => {
+        reloadFeed()
     }, [user])
 
     if(!localUser){
@@ -34,7 +44,10 @@ const HomePage: FC<HomePageProps> = ({  }) => {
     }
 
     return (
-    <>
+    <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+    }}>
         <Backdrop 
         sx={{ 
             color: '#fff', 
@@ -54,7 +67,10 @@ const HomePage: FC<HomePageProps> = ({  }) => {
         }}>
             <AddIcon />
         </Fab>
-    </>
+
+        <PlansFeed localUser={localUser} planItemList={plansFeed} />
+
+    </div>
     )
 };
 

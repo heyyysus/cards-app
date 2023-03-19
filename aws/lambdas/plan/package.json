@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npx tsc && cd dist && zip -r ./lambda.zip ./* && cp ./lambda.zip ../aws_dist/lambda.zip && rm ./lambda.zip",
-    "deploy": "aws lambda update-function-code --function-name=getUser --zip-file fileb://aws_dist/lambda.zip",
+    "deploy": "aws lambda update-function-code --function-name=hoppin-plan --zip-file fileb://aws_dist/lambda.zip",
     "update-deps": "cp -r package*.json dist/ && cd ./dist && npm i && rm package*.json"
   },
   "author": "",

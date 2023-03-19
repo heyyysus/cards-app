@@ -10,13 +10,17 @@ export interface IUser {
     followers?: IUser[],
 }
 
-export interface IPlan {
+export interface IPlan{
     plan_id: number,
     plan_name?: string,
     plan_desc?: string,
+    plan_lat?: number,
+    plan_lng?: number,
+    author?: IUser,
+    start_ts?: Date,
+    end_ts?: Date,
     ts?: Date,
-    user?: IUser,
-};
+}
 
 // USER DEPS
 const fetchOneUserBy = async (key: string, value: string, fields: string[] = ['*']): Promise<IUser> => {
@@ -41,7 +45,14 @@ export const getUserPlans = async (id: string): Promise<IPlan[]> => {
         const query = `SELECT * FROM plans 
                         WHERE user_id=$1`;
         const result = await db.query(query, [id]);
-        return result.rows;
+        const plansPromise = result.rows.map(async p => {
+            const plan: IPlan = {
+                author: await fetchOneUserBy('user_id', p["pk_users_plans"]),
+                ... p,
+            };
+            return plan;
+        });
+        return await Promise.all(plansPromise);
     } catch(e){
         console.log(e);
         return null;
@@ -53,8 +64,34 @@ export const getPlanById = async (id: string): Promise<IPlan> => {
         const query = `SELECT * FROM plans 
                         WHERE plan_id=$1`;
         const result = await db.query(query, [id]);
-        return result.rows[0];
+        let plan: IPlan = result.rows[0];
+        plan.author = await fetchOneUserBy('user_id', result.rows[0]["fk_users_plans"]);
+        return plan;
     } catch(e){
+        console.log(e);
+        return null;
+    }
+}
+
+export const getAllPlans = async (): Promise<IPlan[]> => {
+    try {
+        const query = "SELECT * FROM plans";
+
+        console.log("STARTING QUERY")
+
+        const result = await db.query(query);
+
+        console.log(`FINISHED QUERY: rowCount: ${result.rowCount}`)
+
+        const plansPromise = result.rows.map(async p => {
+            const plan: IPlan = {
+                author: await fetchOneUserBy('user_id', p["fk_users_plans"]),
+                ... p,
+            };
+            return plan;
+        });
+        return await Promise.all(plansPromise);
+    } catch (e) {
         console.log(e);
         return null;
     }
@@ -71,7 +108,7 @@ export const createPlan = async (plan: IPlan, sub: string): Promise<IPlan> => {
         let newPlan = result.rows[0];
         if(!newPlan) return null;
         const user = await fetchOneUserBy('user_id', sub);
-        plan.user = user;
+        plan.author = user;
         return plan;
     } catch(e){
         console.log(e);
