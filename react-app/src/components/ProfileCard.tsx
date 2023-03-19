@@ -1,18 +1,25 @@
 import { User } from '@auth0/auth0-spa-js';
 import { FC } from 'react';
-
-import { CardContent } from '@mui/material';
+import config from "../config.json";
+import { Avatar, CardContent } from '@mui/material';
+import { IUser } from '../api/models/IUser';
 
 export interface ProfileCardProps {
-    user: User,
+    user: IUser,
     className?: string,
 };
 
 export const ProfileCard: FC<ProfileCardProps> =  ({ user, className }) => {
     return (
-        <CardContent className={className}>
-            <img src={ user.picture } /> 
-            <p>{ user.sub }</p>
+        <CardContent className={className} sx={{
+            display: 'flex',
+            flexDirection: 'row'
+        }}>
+            <Avatar 
+                sx={{ width: 50, height: 50, marginRight: '20px' }} 
+                src={ user.profile_img || `${process.env.PUBLIC_URL}${config.DEFAULT_PROFILE_IMAGE}` } 
+            /> 
+            <p>{ user.username }</p>
         </CardContent>
     );
 };

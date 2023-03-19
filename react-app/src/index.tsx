@@ -23,7 +23,7 @@ root.render(
     }}
   >
     <ThemeProvider theme={theme}>
-      <App />
+        <App />
     </ThemeProvider>
   </Auth0Provider>,
 );

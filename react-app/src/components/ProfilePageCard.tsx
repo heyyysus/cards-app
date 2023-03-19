@@ -1,4 +1,4 @@
-import { Avatar, Backdrop, ButtonBase, Card, InputAdornment, TextField } from '@mui/material';
+import { Avatar, Backdrop, Button, ButtonBase, Card, InputAdornment, TextField } from '@mui/material';
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
 import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined';
 import { FC, useEffect, useState } from 'react';
@@ -27,6 +27,12 @@ export const ProfilePageCard: FC<ProfilePageCardProps> =  ({ profileUser, user, 
     const [ tempLocalProfileImage, setTempLocalProfileImage ] = useState<string | null>(null);
     const [ formImage, setFormImage ] = useState<File | undefined>(undefined);
     const isLocalUser = profileUser?.user_id === user?.sub;
+
+    const styles = {
+        followButton: {
+            width: '75px',
+        }
+    };
 
     const handleSaveEdit = () => {
         if((formUsername !== profileUser?.username || formBio !== profileUser.bio || formImage) && profileUser){
@@ -103,6 +109,22 @@ export const ProfilePageCard: FC<ProfilePageCardProps> =  ({ profileUser, user, 
                         () => { setPictureEditMode(!pictureEditMode) }
                     }
                 />
+
+                {/** USERNAME FIELD */}
+                <TextField 
+                    id="username_field" 
+                    label="Username" 
+                    variant="standard" 
+                    value={formUsername} 
+                    onChange={ (e) => setFormUsername(e.target.value) }
+                    margin='normal'
+                    sx={{
+                        width: '200px',
+                    }}
+                    InputProps={{
+                        startAdornment: <InputAdornment position='start' >@</InputAdornment>
+                    }}
+                />
             
 
                 <div style={{
@@ -120,20 +142,7 @@ export const ProfilePageCard: FC<ProfilePageCardProps> =  ({ profileUser, user, 
                     </ButtonBase>
                 </div>
                 
-                <TextField 
-                    id="username_field" 
-                    label="Username" 
-                    variant="standard" 
-                    value={formUsername} 
-                    onChange={ (e) => setFormUsername(e.target.value) }
-                    margin='normal'
-                    sx={{
-                        width: '200px',
-                    }}
-                    InputProps={{
-                        startAdornment: <InputAdornment position='start' >@</InputAdornment>
-                    }}
-                />
+                
 
                 <TextField
                     id="user_bio_field"
@@ -160,13 +169,51 @@ export const ProfilePageCard: FC<ProfilePageCardProps> =  ({ profileUser, user, 
                     src={profileUser.profile_img || `${process.env.PUBLIC_URL}${config.DEFAULT_PROFILE_IMAGE}`}
                     sx={{ width: 100, height: 100, marginBottom: '20px' }}
                 />
+
+
+                <div style={{
+                    display: 'flex',
+                    alignItems: 'center'
+                }}>
+                    <p style={{ marginRight: '10px' }}>@{profileUser.username}</p>
+
+                    {/* FOLLOW BUTTON */}
+                    {!(isLocalUser) ? (
+                        <>
+                        {(profileUser.followers?.some(f => f.user_id === localUser.user_id)) 
+                        ?
+                        <Button 
+                            variant='outlined' 
+                            color='error'  
+                            size='small'
+                            onClick={() => handleUserAction(profileUser.user_id, 'unfollow')}
+                            style={styles.followButton}
+                            >
+                            Unfollow
+                        </Button>
+                        :
+                        <Button 
+                            variant='outlined' 
+                            color='primary'  
+                            size='small'
+                            onClick={() => handleUserAction(profileUser.user_id, 'follow')}
+                            style={styles.followButton}
+                            >
+                            Follow
+                        </Button>
+                        }
+                    </>
+                    ) : (<></>)}
+                </div>
+
                 <div style={{
                     display: 'flex',
                     flexDirection: 'row',
-                    width: '25%',
-                    justifyContent: 'space-between'
                 }}>
-                    <ButtonBase onClick={() => {setInitBiFollowListVal(0); setShowBiFollowList(true); setEditMode(false);}}>
+                    <ButtonBase onClick={() => {setInitBiFollowListVal(0); setShowBiFollowList(true); setEditMode(false);}}
+                                sx={{
+                                    marginRight: '10px'
+                                }}>
                         <p><b>{profileUser.following?.length}</b> Following</p>
                     </ButtonBase>
 
@@ -174,7 +221,7 @@ export const ProfilePageCard: FC<ProfilePageCardProps> =  ({ profileUser, user, 
                         <p><b>{profileUser.followers?.length}</b> Followers</p>
                     </ButtonBase>
                 </div>
-                <p>@{profileUser.username}</p>
+
                 <p><b>Bio: </b>{profileUser.bio}</p>
                 </>
             ) }

@@ -54,7 +54,7 @@ const userList: IUser[] = [
 
 Populated.args = {
   localUser: localUser,
-  userList: userList
+  userList: userList,
 };
 
 

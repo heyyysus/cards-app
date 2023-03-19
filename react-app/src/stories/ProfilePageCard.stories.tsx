@@ -21,16 +21,46 @@ export default {
 const Template: ComponentStory<typeof ProfilePageCard> = (args) => <ThemeProvider theme={theme}><ProfilePageCard {...args} /></ThemeProvider>;
 
 export const LocalUser = Template.bind({});
+export const NotLocalUser = Template.bind({});
 
 const user: User = {
   sub: '1',
 };
 
-const profileUser: IUser = {
+const userList: IUser[] = [
+  {
+    user_id: '2',
+    profile_img: undefined,
+    username: 'Trey',
+  },
+  {
+    user_id: '3',
+    profile_img: undefined,
+    username: 'Dave',
+  },
+  {
+    user_id: '4',
+    profile_img: undefined,
+    username: 'Dylan',
+  }
+]
+
+const profileUser1: IUser = {
   user_id: '1',
   profile_img: undefined,
   username: 'TroyTheBoy',
-  bio: "Yo what the fuck is up my name is Troy and I like to fuckign party",
+  bio: "Yo what the fuck is up my name is Troy and I like to party",
+  followers: userList,
+  following: userList.slice(1,3),
+}
+
+const profileUser2: IUser = {
+  user_id: '2',
+  profile_img: undefined,
+  username: 'TheDude',
+  bio: "Im just a dude",
+  followers: userList,
+  following: userList.slice(1,3),
 }
 
 const saveUserEdit = (newUser: IUser) => {
@@ -40,6 +70,14 @@ const saveUserEdit = (newUser: IUser) => {
 
 LocalUser.args = {
   user: user,
-  profileUser: profileUser,
+  localUser: profileUser1,
+  profileUser: profileUser1,
+  saveUserEdit: saveUserEdit,
+}
+
+NotLocalUser.args = {
+  user: user,
+  localUser: profileUser1,
+  profileUser: profileUser2,
   saveUserEdit: saveUserEdit,
 }
