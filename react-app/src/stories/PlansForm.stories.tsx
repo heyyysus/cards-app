@@ -4,6 +4,7 @@ import { PlansForm } from '../components/PlansForm';
 import theme from '../utils/theme';
 import { ThemeProvider } from '@mui/material';
 import { IUser } from '../api/models/IUser';
+import { IPlan } from '../api/models/IPlan';
 
 export default {
   title: 'Hoppin/PlansForm',
@@ -49,7 +50,7 @@ const localUser: IUser = {
 export const Default = Template.bind({});
 Default.args = {
   handleExit: () => {},
-  handleSubmit: () => {},
+  handleSubmit: (plan: IPlan) => {console.log(plan)},
   localUser: localUser,
 
 }

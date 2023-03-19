@@ -8,10 +8,11 @@ import { width } from '@mui/system';
 
 import PublicIcon from '@mui/icons-material/Public';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
+import { IPlan } from '../api/models/IPlan';
 
 
 export interface PlansFormProps {
-    handleSubmit: () => void,
+    handleSubmit: (plan: IPlan) => void,
     handleExit: () => void,
     localUser: IUser,
 };
@@ -28,6 +29,10 @@ export const PlansForm: FC<PlansFormProps> =  ({ handleSubmit, handleExit, local
     const [ formEndDate, setFormEndDate ] = useState<string>(ISODate);
     const [ formEndTime, setFormEndTime ] = useState<string>(ISOTime);
     const [ formPublic, setFormPublic ] = useState(true);
+
+    const dateFromDateTime = (date: string, time: string) => {
+        return new Date(`${date}T${time}`);
+    }
 
     return (
         <Paper sx={{
@@ -97,7 +102,16 @@ export const PlansForm: FC<PlansFormProps> =  ({ handleSubmit, handleExit, local
                     control={<Switch color='primary' defaultChecked onChange={() => setFormPublic(!formPublic)}/>}  />
                 </div>
 
-                <Button variant='contained' color='primary' onClick={() => handleSubmit()} sx={{
+                <Button variant='contained' color='primary' onClick={() => {
+                    handleSubmit({
+                        plan_id: 0,
+                        plan_name: formName,
+                        plan_desc: formDesc,
+                        author: localUser,
+                        start_ts: dateFromDateTime(formStartDate, formStartTime),
+                        end_ts: dateFromDateTime(formEndDate, formEndTime)
+                    })
+                }} sx={{
                     marginTop: '30px'
                 }}>Post Plan</Button>
             </div>
