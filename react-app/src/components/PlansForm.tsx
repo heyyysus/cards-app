@@ -1,8 +1,14 @@
-import { Button, Input, Paper, TextField } from '@mui/material';
-import { FC } from 'react';
+import { Button, FormControlLabel, Input, Paper, Switch, TextField } from '@mui/material';
+import { FC, useEffect, useState } from 'react';
 import { IUser } from '../api/models/IUser';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { ProfileCard } from './ProfileCard';
+import Datetime from 'react-datetime';
+import { width } from '@mui/system';
+
+import PublicIcon from '@mui/icons-material/Public';
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
+
 
 export interface PlansFormProps {
     handleSubmit: () => void,
@@ -11,6 +17,18 @@ export interface PlansFormProps {
 };
 
 export const PlansForm: FC<PlansFormProps> =  ({ handleSubmit, handleExit, localUser }) => {
+    const ISODateTime = (new Date()).toISOString().split('T')
+    const ISODate = ISODateTime[0]
+
+    const ISOTime = "";
+    const [ formName, setFormName ] = useState("");
+    const [ formDesc, setFormDesc ] = useState("");
+    const [ formStartDate, setFormStartDate ] = useState<string>(ISODate);
+    const [ formStartTime, setFormStartTime ] = useState<string>(ISOTime);
+    const [ formEndDate, setFormEndDate ] = useState<string>(ISODate);
+    const [ formEndTime, setFormEndTime ] = useState<string>(ISOTime);
+    const [ formPublic, setFormPublic ] = useState(true);
+
     return (
         <Paper sx={{
             padding: '10px',
@@ -29,17 +47,56 @@ export const PlansForm: FC<PlansFormProps> =  ({ handleSubmit, handleExit, local
                 </Button>
             </div>
             <div style={{
-                padding: '30px'
+                padding: '30px',
+                overflowY: 'scroll'
             }}>
                 <ProfileCard user={localUser} />
+                
                 <TextField
-                    id="outlined-uncontrolled"
+                    id="name-field"
                     label="Name"
                     margin='dense'
                     variant='standard'
+                    value={formName}
+                    onChange={(e) => setFormName(e.target.value)}
                 />
+
                 <TextField fullWidth multiline minRows={3} maxRows={6} 
-                label="Description" id="fullWidth" margin='dense' variant='standard' />
+                label="Description" id="description-field" margin='dense' variant='standard'
+                value={formDesc} onChange={(e) => setFormDesc(e.target.value)} />
+                
+                <div style={{
+                    marginTop: '20px',
+                    marginBottom: '20px',
+                }}>
+                    <p>Event Start: </p>
+
+                    <input type='date' value={formStartDate} style={{marginRight: '10px'  }} 
+                        onChange={e => {setFormStartDate(e.target.value)}} />
+
+                    <input type='time' value={formStartTime} 
+                        onChange={e => {setFormStartTime(e.target.value)}} />
+                </div>
+
+                <div style={{
+                    marginTop: '20px',
+                    marginBottom: '20px',
+                }}>
+                    <p>Event End: </p>
+                    <input type='date' value={formEndDate} style={{marginRight: '10px'  }} 
+                        onChange={e => {setFormEndDate(e.target.value)}} />
+
+                    <input type='time' value={formEndTime} 
+                        onChange={e => {setFormEndTime(e.target.value)}} />
+                </div>
+                
+                <div>
+                    <FormControlLabel label={(formPublic) ? 
+                        (<div>Public Plan</div>) : 
+                        (<div>Invitees Only</div>)}
+                    control={<Switch color='primary' defaultChecked onChange={() => setFormPublic(!formPublic)}/>}  />
+                </div>
+
                 <Button variant='contained' color='primary' onClick={() => handleSubmit()} sx={{
                     marginTop: '30px'
                 }}>Post Plan</Button>
