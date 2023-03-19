@@ -30,7 +30,7 @@ export const ProfilePageCard: FC<ProfilePageCardProps> =  ({ profileUser, user, 
 
     const styles = {
         followButton: {
-            width: '75px',
+            width: '90px',
         }
     };
 
@@ -125,24 +125,6 @@ export const ProfilePageCard: FC<ProfilePageCardProps> =  ({ profileUser, user, 
                         startAdornment: <InputAdornment position='start' >@</InputAdornment>
                     }}
                 />
-            
-
-                <div style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    width: '25%',
-                    justifyContent: 'space-between'
-                }}>
-                    <ButtonBase onClick={() => {setInitBiFollowListVal(0); setShowBiFollowList(true); setEditMode(false);}}>
-                        <p><b>{profileUser.following?.length}</b> Following</p>
-                    </ButtonBase>
-
-                    <ButtonBase onClick={() => {setInitBiFollowListVal(1); setShowBiFollowList(true); setEditMode(false);}}>
-                        <p><b>{profileUser.followers?.length}</b> Followers</p>
-                    </ButtonBase>
-                </div>
-                
-                
 
                 <TextField
                     id="user_bio_field"
