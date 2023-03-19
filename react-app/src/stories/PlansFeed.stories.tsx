@@ -3,24 +3,37 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { IUser } from '../api/models/IUser';
 import theme from '../utils/theme';
 import { ThemeProvider } from '@mui/material';
-import { PlansFeedItem } from '../components/PlansFeedItem';
+import { PlansFeed } from '../components/PlansFeed';
 import { IPlan } from '../api/models/IPlan';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  title: 'Hoppin/PlansFeedItem',
-  component: PlansFeedItem,
+  title: 'Hoppin/PlansFeed',
+  component: PlansFeed,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {
     backgroundColor: { control: 'color' },
   },
-} as ComponentMeta<typeof PlansFeedItem>;
+} as ComponentMeta<typeof PlansFeed>;
 
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-const Template: ComponentStory<typeof PlansFeedItem> = (args) => <ThemeProvider theme={theme}><PlansFeedItem {...args} /></ThemeProvider>;
+const Template: ComponentStory<typeof PlansFeed> = (args) => <ThemeProvider theme={theme}><PlansFeed {...args} /></ThemeProvider>;
 
 export const Item1 = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
+
+const localUser: IUser = {
+  user_id: '1',
+  profile_img: undefined,
+  username: 'TroyTheBoy',
+  bio: "Yo what the fuck is up my name is Troy and I like to fuckign party",
+  followers: [
+    { user_id: '2' }
+  ],
+  following: [
+    { user_id: '3' }
+  ]
+}
 
 const planItem: IPlan = {
     plan_id: 0,
@@ -39,5 +52,6 @@ const planItem: IPlan = {
 };
 
 Item1.args = {
-    planItem: planItem
+    planItemList: [planItem, planItem, planItem],
+    localUser: localUser
 };
