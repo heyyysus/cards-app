@@ -1,33 +1,29 @@
-# Gaucho Group
-An application to help UCSB students form and find study groups on campus. 
+# Hoppin
+An application to help UCSB students and the local community to organize events. 
 
 ### Contributors
 - Jesus Velarde - heyyysus
 
 ---
 
-## Run on localhost
-### Dependencies
-**Docker and Docker Compose**
-> Install Docker Desktop on your system: https://www.docker.com/products/docker-desktop/
-
 ### Download
 1. Clone this repository using:  
 `> git clone git@github.com:heyyysus/study-buddies.git`
 2. Change directory to project folder  
-`> cd study-buddies/`
+`> cd hoppin/`
 3. Checkout whichever branch you'd like to build using  
    `> git checkout <branch_name>`
 
-### Build and Run API Development Server
-1. Build docker-compose image  
-   `> docker-compose build`
-2. Run docker-compose image   
-   `> docker-compose up`
-3. Service will run on `http://localhost:5000`
+### Build and Deploy AWS Lambda Functions
+1. Change directory to `aws/lambdas/<lambda_function>`
+2. Build by running `npm run build` (this will create the lambda zip file in `/dist/`)
+3. Deploy by running `npm run deploy` (this requires the aws-cli to be installed. See `package.json` to customize function destination.)
 
-### Start Expo Development Server
-1. Change directory to `expo-client/`
-2. Run `npm install`
-3. Run `expo start`
-4. Expo will list instructions on viewing application on mobile phone.
+### Start 
+1. Change directory to `react-app/`
+2. Run `npm run start`
+3. Development server will run on `http://localhost:3000`
+
+### Run storybooks
+1. Change directory to `react-app`
+2. Run `npm run storybook`
