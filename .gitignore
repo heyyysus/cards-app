@@ -10,3 +10,5 @@ docker-compose.yaml
 *.pkg
 
 *.zip
+
+secret.ts
