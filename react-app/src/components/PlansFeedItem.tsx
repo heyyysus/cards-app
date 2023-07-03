@@ -20,6 +20,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import config from "../config.json";
 import { SimpleMap } from './SimpleMap';
+import { PlanFeedMap } from './PlanFeedMap';
 
 export interface PlansFeedItemProps {
     planItem: IPlan,
@@ -29,7 +30,7 @@ export interface PlansFeedItemProps {
 export const PlansFeedItem: FC<PlansFeedItemProps> =  ({ planItem }) => {
     return (
     <>
-    <Card sx={{ width: '100%', marginBottom: '50px' }}>
+    <Card sx={{ width: '100vw', marginBottom: '50px' }}>
       <CardHeader
         avatar={
           <Avatar alt={planItem.author?.username}
@@ -53,7 +54,8 @@ export const PlansFeedItem: FC<PlansFeedItemProps> =  ({ planItem }) => {
 
 
         {/* MAP GOES HERE */}
-        <SimpleMap center={{lat: planItem.plan_lat || 0, lng: planItem.plan_lng || 0}} zoom={15} />
+        {/* <SimpleMap center={{lat: planItem.plan_lat || 0, lng: planItem.plan_lng || 0}} zoom={15} /> */}
+        <PlanFeedMap center={{lat: planItem.plan_lat || 0, lng: planItem.plan_lng || 0}} zoom={15} />
 
         <Typography variant='body2' sx={{
             marginTop: '10px'
