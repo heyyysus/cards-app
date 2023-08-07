@@ -11,10 +11,15 @@ export interface PlansFeedProps {
 
 export const PlansFeed: FC<PlansFeedProps> =  ({ planItemList, localUser }) => {
     return (
-    <List sx={{ bgcolor: 'background.paper' }}>
-        { planItemList.map(p => (<>
+    <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        width: '100%',
+    }}>
+        { planItemList.map(p => (
                 <PlansFeedItem key={p.plan_id} localUser={localUser} planItem={p} />
-            </>)) }
-    </List>
+            )) }
+    </div>
     );
 };
