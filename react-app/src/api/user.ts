@@ -20,7 +20,7 @@ export const getLocalUser = async (token: string): Promise<IUser | null> => {
 
 export const getUserById = async (id: string, token: string): Promise<IUser | null> => {
     try{
-        const { get } = api(token);
+        const { get } = api<IUser>(token);
         const response = await get(`user?user_id=${id}`)
         if(response.ok){
             const body = await response.json();
@@ -36,7 +36,7 @@ export const getUserById = async (id: string, token: string): Promise<IUser | nu
 
 export const getUserByUsername = async (username: string, token: string): Promise<IUser | null> => {
     try{
-        const { get } = api(token);
+        const { get } = api<IUser>(token);
         const response = await get(`user?username=${username}`)
         if(response.ok){
             const body = await response.json();
@@ -52,7 +52,7 @@ export const getUserByUsername = async (username: string, token: string): Promis
 
 export const patchUser = async (user: IUser, token: string): Promise<IUser | null> => {
     try {
-        const { patch } = api(token);
+        const { patch } = api<IUser>(token);
         const response = await patch('user', user);
         if(response.ok){
             return response.json()
@@ -69,7 +69,7 @@ export const patchUser = async (user: IUser, token: string): Promise<IUser | nul
 
 export const getAllUsers = async (token: string): Promise<IUser[]> => {
     try {
-        const { get } = api(token);
+        const { get } = api<IUser>(token);
         const response = await get('user?searchQuery=1');
         if(response.ok){
             return response.json()
@@ -85,7 +85,7 @@ export const getAllUsers = async (token: string): Promise<IUser[]> => {
 
 export const submitUserAction = async (token: string, user_id: string, action: string): Promise<IUser | null>  => {
     try {
-        const { post } = api(token);
+        const { post } = api<IUser>(token);
         const response = await post(encodeURI(`user?user_id=${user_id}&action=${action}`));
         if(response.ok){
             return response.json()

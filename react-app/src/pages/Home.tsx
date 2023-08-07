@@ -31,7 +31,7 @@ const HomePage: FC<HomePageProps> = ({  }) => {
             getLocalUser(t)
                 .then(u => setLocalUser(u))
             getAllPlans(t)
-                .then(f => setPlansFeed(f))
+                .then(f => {setPlansFeed(f)})
         })
     }
 

@@ -5,8 +5,12 @@ import { IUser } from "./models/IUser";
 
 const API_URL = config.API_URL;
 
-export const api = (token: string) => {
-    const options = (method: string, body?: IUser): RequestInit => ({
+// api function that returns a set of functions that can be used to make requests to the API
+// uses the token to authenticate the user
+// body takes generic type 
+
+export const api = <BodyType>(token: string) => {
+    const options = (method: string, body?: BodyType): RequestInit => ({
         method: method,
         credentials: 'include',
         headers: {
@@ -15,9 +19,9 @@ export const api = (token: string) => {
         body: JSON.stringify(body)
     });
     return {
-        get: async (path: string, body?: IUser) => fetch(`${API_URL}/${path}`, options("GET", body)),
-        post: (path: string, body?: IUser) => fetch(`${API_URL}/${path}`, options("POST", body)),
-        patch: (path: string, body?: IUser) => fetch(`${API_URL}/${path}`, options("PATCH", body)),
-        delete: (path: string, body?: IUser) => fetch(`${API_URL}/${path}`, options("DELETE", body)),
+        get: async (path: string, body?: BodyType) => fetch(`${API_URL}/${path}`, options("GET", body)),
+        post: (path: string, body?: BodyType) => fetch(`${API_URL}/${path}`, options("POST", body)),
+        patch: (path: string, body?: BodyType) => fetch(`${API_URL}/${path}`, options("PATCH", body)),
+        delete: (path: string, body?: BodyType) => fetch(`${API_URL}/${path}`, options("DELETE", body)),
     };
 }
