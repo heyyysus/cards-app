@@ -33,7 +33,7 @@ export const PlanFeedMap: FC<PlanFeedMapProps> =  ({center, zoom}) => {
     }}
     
   >
-    <Marker longitude={center.lng} latitude={center.lat} anchor="bottom" >
+    <Marker longitude={center.lng} latitude={center.lat} anchor="center" >
         {/* <LocationOnIcon color='primary' /> */}
     </Marker>
   </Map>;
