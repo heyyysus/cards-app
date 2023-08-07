@@ -26,7 +26,12 @@ export const PlanFeedMap: FC<PlanFeedMapProps> =  ({center, zoom}) => {
       latitude: center.lat,
       zoom: zoom
     }}
-    mapStyle="mapbox://styles/mapbox/streets-v9"
+    mapStyle="mapbox://styles/mapbox/streets-v12"
+    style={{
+      width: '100%',
+      height: '300px',
+    }}
+    
   >
     <Marker longitude={center.lng} latitude={center.lat} anchor="bottom" >
         {/* <LocationOnIcon color='primary' /> */}

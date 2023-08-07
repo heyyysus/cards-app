@@ -29,8 +29,7 @@ export interface PlansFeedItemProps {
 
 export const PlansFeedItem: FC<PlansFeedItemProps> =  ({ planItem }) => {
     return (
-    <>
-    <Card sx={{ width: '100vw', marginBottom: '50px' }}>
+    <Card sx={{ marginBottom: '50px', width: "100%" }}>
       <CardHeader
         avatar={
           <Avatar alt={planItem.author?.username}
@@ -60,8 +59,13 @@ export const PlansFeedItem: FC<PlansFeedItemProps> =  ({ planItem }) => {
         <Typography variant='body2' sx={{
             marginTop: '10px'
         }}>
-            <div>Start: {planItem.start_ts?.toLocaleString()}</div> 
-            <div>End: {planItem.end_ts?.toLocaleString()}</div>
+            Start: {planItem.start_ts?.toLocaleString()}
+        </Typography>
+
+        <Typography variant='body2' sx={{
+            marginTop: '10px'
+        }}>
+            End: {planItem.end_ts?.toLocaleString()}
         </Typography>
 
       </CardContent>
@@ -75,6 +79,5 @@ export const PlansFeedItem: FC<PlansFeedItemProps> =  ({ planItem }) => {
         
       </CardActions>
     </Card>
-    </>
     );
 };
