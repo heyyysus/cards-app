@@ -1,8 +1,7 @@
 import { FC, useEffect, useRef, useState } from 'react';
-import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
+import Map, { Marker } from 'react-map-gl';
 import secret  from "../secret.json";
-
-mapboxgl.accessToken = secret.MAPBOX_API_KEY;
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 
 export interface PlanFeedMapProps {
     center: { 
@@ -13,32 +12,17 @@ export interface PlanFeedMapProps {
 };
 
 export const PlanFeedMap: FC<PlanFeedMapProps> =  ({center, zoom}) => {
-
-    const mapContainer = useRef(null);
-    const map = useRef(null);
-
-    useEffect(() => {
-        if (map.current) return; // initialize map only once
-        map.current = new mapboxgl.Map({
-            container: mapContainer.current as any,
-            style: 'mapbox://styles/mapbox/streets-v12',
-            center: [center.lng, center.lat],
-            zoom: zoom,
-        });
-    });
-
-    // useEffect(() => {
-    // if (!map.current) return; // wait for map to initialize
-    //     map.current.on('move', () => {
-    //         setLng(map.current.getCenter().lng.toFixed(4));
-    //         setLat(map.current.getCenter().lat.toFixed(4));
-    //         setZoom(map.current.getZoom().toFixed(2));
-    //     });
-    // });
-
-    return (
-    <div>
-        <div ref={mapContainer} className="map-container" />
-    </div>
-    );
+    return <Map
+    mapboxAccessToken = {secret.MAPBOX_API_KEY}
+    initialViewState = {{
+      longitude: center.lng,
+      latitude: center.lat,
+      zoom: zoom
+    }}
+    mapStyle="mapbox://styles/mapbox/streets-v9"
+  >
+    <Marker longitude={center.lng} latitude={center.lat} anchor="bottom" >
+        {/* <LocationOnIcon color='primary' /> */}
+    </Marker>
+  </Map>;
 };
