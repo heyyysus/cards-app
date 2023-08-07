@@ -1,9 +1,0 @@
-dist/
-node_modules/
-
-# macOS
-.DS_Store
-
-.env
-
-public/images/
