@@ -3,6 +3,9 @@ import Map, { Marker } from 'react-map-gl';
 import secret  from "../secret.json";
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 
+// Get primary color from theme to use for map marker
+import { useTheme } from '@mui/material/styles';
+
 // The following is required to stop "npm build" from transpiling mapbox code.
 import mapboxgl from 'mapbox-gl';
     // notice the exclamation point in the import.
@@ -19,6 +22,7 @@ export interface PlanFeedMapProps {
 };
 
 export const PlanFeedMap: FC<PlanFeedMapProps> =  ({center, zoom}) => {
+  const theme = useTheme(); // Get theme to use for map marker
     return <Map
     mapboxAccessToken = {secret.MAPBOX_API_KEY}
     initialViewState = {{
@@ -33,7 +37,7 @@ export const PlanFeedMap: FC<PlanFeedMapProps> =  ({center, zoom}) => {
     }}
     
   >
-    <Marker longitude={center.lng} latitude={center.lat} anchor="center" >
+    <Marker longitude={center.lng} latitude={center.lat} anchor="center" color={theme.palette.primary.main}>
         {/* <LocationOnIcon color='primary' /> */}
     </Marker>
   </Map>;
