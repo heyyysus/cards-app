@@ -33,7 +33,7 @@ export const PlansFeedItem: FC<PlansFeedItemProps> =  ({ planItem }) => {
       <CardHeader
         avatar={
           <Avatar alt={planItem.author?.username}
-          src={planItem.author?.profile_img || `${process.env.PUBLIC_URL}${config.DEFAULT_PROFILE_IMAGE}`} />
+          src={planItem.author?.profile_img ? `${config.IMAGE_ROOT_URL}${planItem.author.profile_img}` : `${process.env.PUBLIC_URL}${config.DEFAULT_PROFILE_IMAGE}`} />
         }
         action={
           <IconButton aria-label="settings">

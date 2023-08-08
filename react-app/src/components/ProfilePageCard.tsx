@@ -94,7 +94,7 @@ export const ProfilePageCard: FC<ProfilePageCardProps> =  ({ profileUser, user, 
                 <>
                 <Avatar
                     alt={profileUser.username}
-                    src={tempLocalProfileImage || profileUser.profile_img || `${process.env.PUBLIC_URL}${config.DEFAULT_PROFILE_IMAGE}`}
+                    src={tempLocalProfileImage || (profileUser.profile_img ? `${config.IMAGE_ROOT_URL}${profileUser.profile_img}` : `${process.env.PUBLIC_URL}${config.DEFAULT_PROFILE_IMAGE}`)}
                     sx={{ 
                         width: 100, 
                         height: 100, 
@@ -148,7 +148,7 @@ export const ProfilePageCard: FC<ProfilePageCardProps> =  ({ profileUser, user, 
                 <>
                 <Avatar
                     alt={profileUser.username}
-                    src={profileUser.profile_img || `${process.env.PUBLIC_URL}${config.DEFAULT_PROFILE_IMAGE}`}
+                    src={profileUser.profile_img ? `${config.IMAGE_ROOT_URL}${profileUser.profile_img}` : `${process.env.PUBLIC_URL}${config.DEFAULT_PROFILE_IMAGE}`}
                     sx={{ width: 100, height: 100, marginBottom: '20px' }}
                 />
 

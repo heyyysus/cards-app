@@ -34,7 +34,7 @@ export const UserProfileChip: FC<UserProfileChipProps> =  ({ user }) => {
         >
             <Avatar
                 alt={user.username}
-                src={user.profile_img || `${process.env.PUBLIC_URL}${config.DEFAULT_PROFILE_IMAGE}`}
+                src={user.profile_img ? `${config.IMAGE_ROOT_URL}${user.profile_img}` : `${process.env.PUBLIC_URL}${config.DEFAULT_PROFILE_IMAGE}`}
                 sx={{ width: 50, height: 50, marginRight: '20px' }}
             />
 

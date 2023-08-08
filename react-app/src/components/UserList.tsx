@@ -50,7 +50,7 @@ export const UserListItem: FC<UserListItemProps> = ({ user, localUserfollows, fo
         }}>
         <ButtonBase onClick={ () => { if(handleExit) handleExit(); navigate(`/user/${user.username}`) } }>
             <ListItemAvatar>
-            <Avatar alt="Remy Sharp" src={user.profile_img || `${process.env.PUBLIC_URL}${config.DEFAULT_PROFILE_IMAGE}`} />
+            <Avatar alt="Remy Sharp" src={user.profile_img ? `${config.IMAGE_ROOT_URL}${user.profile_img}` : `${process.env.PUBLIC_URL}${config.DEFAULT_PROFILE_IMAGE}`} />
             </ListItemAvatar>
             <ListItemText
             primary={user.username}
