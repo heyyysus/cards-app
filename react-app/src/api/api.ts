@@ -22,6 +22,6 @@ export const api = <BodyType>(token: string) => {
         get: async (path: string, body?: BodyType) => fetch(`${API_URL}/${path}`, options("GET", body)),
         post: (path: string, body?: BodyType) => fetch(`${API_URL}/${path}`, options("POST", body)),
         patch: (path: string, body?: BodyType) => fetch(`${API_URL}/${path}`, options("PATCH", body)),
-        delete: (path: string, body?: BodyType) => fetch(`${API_URL}/${path}`, options("DELETE", body)),
+        del: (path: string, body?: BodyType) => fetch(`${API_URL}/${path}`, options("DELETE", body)),
     };
 }

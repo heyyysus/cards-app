@@ -21,13 +21,29 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import config from "../config.json";
 import { SimpleMap } from './SimpleMap';
 import { PlanFeedMap } from './PlanFeedMap';
+import PlansFeedItemOptionsMenu from './PlansFeedItemOptionsMenu';
+import { User } from '@auth0/auth0-react';
 
 export interface PlansFeedItemProps {
     planItem: IPlan,
     localUser: IUser,
+    user?: User,
 };
 
-export const PlansFeedItem: FC<PlansFeedItemProps> =  ({ planItem }) => {
+export const PlansFeedItem: FC<PlansFeedItemProps> =  ({ planItem, localUser, user }) => {
+
+    const isAuthor = planItem.author?.user_id === localUser.user_id;
+
+    const handleOptionsClick = ({ pageX, pageY }: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      setOptionsMenuLocation({ x: pageX, y: pageY });
+    };
+
+    const handleCloseOptions = () => {
+      setOptionsMenuLocation(null);
+    };
+
+    const [ optionsMenuLocation, setOptionsMenuLocation ] = React.useState<{ x: number, y: number } | null>(null);
+
     return (
     <Card sx={{ marginBottom: '50px', width: "100%" }}>
       <CardHeader
@@ -36,7 +52,7 @@ export const PlansFeedItem: FC<PlansFeedItemProps> =  ({ planItem }) => {
           src={planItem.author?.profile_img ? `${config.IMAGE_ROOT_URL}${planItem.author.profile_img}` : `${process.env.PUBLIC_URL}${config.DEFAULT_PROFILE_IMAGE}`} />
         }
         action={
-          <IconButton aria-label="settings">
+          <IconButton aria-label="settings" onClick={handleOptionsClick} >
             <MoreVertIcon />
           </IconButton>
         }
@@ -44,6 +60,17 @@ export const PlansFeedItem: FC<PlansFeedItemProps> =  ({ planItem }) => {
         subheader={planItem.ts?.toLocaleString()}
       />
       <CardContent>
+        {/** PlansFeedItemOptionsMenu Must be in front of PlanFeedMap */}
+        {(optionsMenuLocation) ? <div style={{
+          position: 'absolute',
+          top: optionsMenuLocation.y,
+          left: optionsMenuLocation.x,
+          zIndex: 1000,
+        }}><PlansFeedItemOptionsMenu 
+              handleClose={handleCloseOptions} 
+              isAuthor={isAuthor}
+              user={user}
+          /></div> : null}
 
         <Typography variant="body1" color="text.primary" sx={{
             marginBottom: '5px',

@@ -68,7 +68,7 @@ const HomePage: FC<HomePageProps> = ({  }) => {
             <AddIcon />
         </Fab>
 
-        <PlansFeed localUser={localUser} planItemList={plansFeed} />
+        <PlansFeed user={user} localUser={localUser} planItemList={plansFeed} />
 
     </div>
     )

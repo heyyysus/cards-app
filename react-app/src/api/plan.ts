@@ -48,3 +48,19 @@ export const createPlan = async (token: string, plan: IPlan): Promise<IPlan | nu
         return null;
     }
 }
+
+export const deletePlan = async (token: string, id: string): Promise<boolean> => {
+    try {
+        const { del } = api<IPlan>(token);
+        const response = await del(`plan/${id}`);
+        if(response.ok){
+            return true;
+        } else {
+            console.log(response)
+            return false;
+        }
+    } catch (e) {
+        console.log(e)
+        return false;
+    }
+}
