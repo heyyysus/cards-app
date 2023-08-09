@@ -37,7 +37,7 @@ export const PlansFeedItem: FC<PlansFeedItemProps> =  ({ planItem, localUser, ha
     const isAuthor = planItem.author?.user_id === localUser.user_id;
 
     const handleOptionsClick = ({ pageX, pageY }: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-      setOptionsMenuLocation({ x: pageX, y: pageY });
+      setOptionsMenuLocation({ x: pageX - 320, y: pageY });
     };
 
     const handleCloseOptions = () => {
