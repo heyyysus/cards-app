@@ -115,3 +115,15 @@ export const createPlan = async (plan: IPlan, sub: string): Promise<IPlan> => {
         return null;
     }
 }
+
+export const deletePlan = async (id: number): Promise<boolean> => {
+    if(!id) return false;
+    try {
+        const query = "DELETE FROM plans WHERE plan_id=$1";
+        const result = await db.query(query, [id]);
+        return true;
+    } catch(e){
+        console.log(e);
+        return false;
+    }
+}

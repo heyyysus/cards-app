@@ -1,5 +1,5 @@
 import { APIGatewayProxyResult } from "aws-lambda";
-import { createPlan, getAllPlans, getPlanById, getUserPlans } from "./plan.service";
+import { createPlan, deletePlan, getAllPlans, getPlanById, getUserPlans } from "./plan.service";
 import { APIEvent, Context } from "./types";
 
 
@@ -56,6 +56,36 @@ const plans_handler = async (event: APIEvent, context: Context): Promise <APIGat
                     body: JSON.stringify(await createPlan(newPlan, claims.sub))
                 };
             }
+        case "DELETE":
+            if(!plan_id) return {
+                statusCode: 400,
+                body: "Missing plan_id"
+            };
+
+            const plan = await getPlanById(plan_id);
+
+            if(!plan) return {
+                statusCode: 404,
+                body: "Plan not found"
+            };
+
+            if(plan.author.user_id !== claims.sub) return {
+                statusCode: 403,
+                body: "You are not the author of this plan"
+            };
+
+            const success = await deletePlan(plan_id);
+            
+            if(!success) return {
+                statusCode: 500,
+                body: "Failed to delete plan"
+            };
+
+            return {
+                statusCode: 200,
+                body: "Plan deleted"
+            };
+
     }
 }
 
