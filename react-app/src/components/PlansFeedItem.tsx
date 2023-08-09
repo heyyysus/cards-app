@@ -27,10 +27,10 @@ import { User } from '@auth0/auth0-react';
 export interface PlansFeedItemProps {
     planItem: IPlan,
     localUser: IUser,
-    user?: User,
+    handlePlanAction: (plan_id: number, action: string) => void,
 };
 
-export const PlansFeedItem: FC<PlansFeedItemProps> =  ({ planItem, localUser, user }) => {
+export const PlansFeedItem: FC<PlansFeedItemProps> =  ({ planItem, localUser, handlePlanAction }) => {
 
     const isAuthor = planItem.author?.user_id === localUser.user_id;
 
@@ -52,7 +52,7 @@ export const PlansFeedItem: FC<PlansFeedItemProps> =  ({ planItem, localUser, us
           src={planItem.author?.profile_img ? `${config.IMAGE_ROOT_URL}${planItem.author.profile_img}` : `${process.env.PUBLIC_URL}${config.DEFAULT_PROFILE_IMAGE}`} />
         }
         action={
-          <IconButton aria-label="settings" onClick={handleOptionsClick} >
+          <IconButton aria-label="settings" onClick={ handleOptionsClick } >
             <MoreVertIcon />
           </IconButton>
         }
@@ -67,9 +67,10 @@ export const PlansFeedItem: FC<PlansFeedItemProps> =  ({ planItem, localUser, us
           left: optionsMenuLocation.x,
           zIndex: 1000,
         }}><PlansFeedItemOptionsMenu 
-              handleClose={handleCloseOptions} 
-              isAuthor={isAuthor}
-              user={user}
+              handleClose={ handleCloseOptions } 
+              isAuthor={ isAuthor }
+              planItem={ planItem }
+              handlePlanAction={ handlePlanAction }
           /></div> : null}
 
         <Typography variant="body1" color="text.primary" sx={{

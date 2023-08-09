@@ -15,7 +15,7 @@ import Styles from './Home.module.css';
 import { PlansForm } from '../components/PlansForm';
 import { PlansFeed } from '../components/PlansFeed';
 import { IPlan } from '../api/models/IPlan';
-import { getAllPlans } from '../api/plan';
+import { deletePlan, getAllPlans } from '../api/plan';
 
 export interface HomePageProps {};
 
@@ -33,6 +33,21 @@ const HomePage: FC<HomePageProps> = ({  }) => {
             getAllPlans(t)
                 .then(f => {setPlansFeed(f)})
         })
+    }
+
+    const handlePlanAction = async (plan_id: number, action: string) => {
+        try {
+            const token = await getAccessTokenSilently();
+
+            if(action === 'delete'){
+                const success = await deletePlan(token, plan_id);
+                console.log(success);
+                reloadFeed();
+            }
+
+        } catch(e) {
+            console.log(e);
+        }
     }
 
     useEffect(() => {
@@ -68,7 +83,11 @@ const HomePage: FC<HomePageProps> = ({  }) => {
             <AddIcon />
         </Fab>
 
-        <PlansFeed user={user} localUser={localUser} planItemList={plansFeed} />
+        <PlansFeed 
+            localUser={ localUser } 
+            planItemList={ plansFeed }
+            handlePlanAction={ (plan_id: number, action: string) => handlePlanAction(plan_id, action) }
+        />
 
     </div>
     )

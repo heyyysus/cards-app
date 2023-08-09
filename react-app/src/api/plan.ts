@@ -49,10 +49,10 @@ export const createPlan = async (token: string, plan: IPlan): Promise<IPlan | nu
     }
 }
 
-export const deletePlan = async (token: string, id: string): Promise<boolean> => {
+export const deletePlan = async (token: string, id: number): Promise<boolean> => {
     try {
         const { del } = api<IPlan>(token);
-        const response = await del(`plan/${id}`);
+        const response = await del(`plan?plan_id=${id}`);
         if(response.ok){
             return true;
         } else {

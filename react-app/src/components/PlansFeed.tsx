@@ -8,10 +8,10 @@ import { User } from '@auth0/auth0-react';
 export interface PlansFeedProps {
     planItemList: IPlan[],
     localUser: IUser,
-    user?: User,
+    handlePlanAction: (plan_id: number, action: string) => void;
 };
 
-export const PlansFeed: FC<PlansFeedProps> =  ({ planItemList, localUser, user }) => {
+export const PlansFeed: FC<PlansFeedProps> =  ({ planItemList, localUser, handlePlanAction }) => {
     return (
     <div style={{
         display: 'flex',
@@ -20,7 +20,12 @@ export const PlansFeed: FC<PlansFeedProps> =  ({ planItemList, localUser, user }
         width: '100%',
     }}>
         { planItemList.map(p => (
-                <PlansFeedItem user={user} key={p.plan_id} localUser={localUser} planItem={p} />
+                <PlansFeedItem 
+                    key={ p.plan_id } 
+                    localUser={localUser} 
+                    planItem={p} 
+                    handlePlanAction={ handlePlanAction } 
+                />
             )) }
     </div>
     );

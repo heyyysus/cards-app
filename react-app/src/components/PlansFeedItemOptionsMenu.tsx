@@ -19,17 +19,18 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { User } from '@auth0/auth0-react';
 
 export interface PlansFeedItemOptionsMenuProps {
+    planItem: IPlan;
     handleClose: () => void;
     isAuthor: boolean;
-    user?: User;
+    handlePlanAction: (plan_id: number, action: string) => void;
 }
 
-export const PlansFeedItemOptionsMenu = ({ handleClose, isAuthor }: PlansFeedItemOptionsMenuProps) => {
+export const PlansFeedItemOptionsMenu = ({ handleClose, isAuthor, handlePlanAction, planItem }: PlansFeedItemOptionsMenuProps) => {
 
     const handleDelete = () => {
         console.log("Delete");
+        handlePlanAction(planItem.plan_id, "delete");
     }
-
 
     return (
     <Paper sx={{ width: 320, maxWidth: '100%' }}>
