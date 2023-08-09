@@ -37,8 +37,10 @@ export const PlansForm: FC<PlansFormProps> =  ({ handleSubmit, handleExit, local
     return (
         <Paper sx={{
             padding: '10px',
-            position: 'absolute',
-            top: '100px',
+            position: 'fixed',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)'
         }}>
             <div style={{
             display: 'flex',
