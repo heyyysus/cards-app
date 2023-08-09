@@ -23,6 +23,7 @@ import { SimpleMap } from './SimpleMap';
 import { PlanFeedMap } from './PlanFeedMap';
 import PlansFeedItemOptionsMenu from './PlansFeedItemOptionsMenu';
 import { User } from '@auth0/auth0-react';
+import { format } from 'node:path/posix';
 
 export interface PlansFeedItemProps {
     planItem: IPlan,
@@ -42,7 +43,30 @@ export const PlansFeedItem: FC<PlansFeedItemProps> =  ({ planItem, localUser, ha
       setOptionsMenuLocation(null);
     };
 
+    React.useEffect(() => {
+      console.log(planItem);
+    }, [planItem]);
+
     const [ optionsMenuLocation, setOptionsMenuLocation ] = React.useState<{ x: number, y: number } | null>(null);
+
+    const formatTimestampToString = (date: Date) => {
+      const newDate = new Date(date);
+      return newDate.toLocaleString('en-US');
+    }
+
+    const formatTimeOfEvent = (start: Date, end: Date) => {
+      const startDate = new Date(start);
+      const endDate = new Date(end);
+      const isSameDay = startDate.getDate() === endDate.getDate();
+
+      if (isSameDay) {
+        return `${startDate.toLocaleString()} - ${endDate.toLocaleTimeString()}`;
+      }
+
+      else {
+        return `${startDate.toLocaleString()} - ${endDate.toLocaleString()}`;
+      }
+    }
 
     return (
     <Card sx={{ marginBottom: '50px', width: "100%" }}>
@@ -56,8 +80,8 @@ export const PlansFeedItem: FC<PlansFeedItemProps> =  ({ planItem, localUser, ha
             <MoreVertIcon />
           </IconButton>
         }
-        title={planItem.plan_name}
-        subheader={planItem.ts?.toLocaleString()}
+        title={planItem.author?.username}
+        subheader={planItem?.ts ? formatTimestampToString(planItem.ts) : ""}
       />
       <CardContent>
         {/** PlansFeedItemOptionsMenu Must be in front of PlanFeedMap */}
@@ -73,28 +97,24 @@ export const PlansFeedItem: FC<PlansFeedItemProps> =  ({ planItem, localUser, ha
               handlePlanAction={ handlePlanAction }
           /></div> : null}
 
+        <Typography variant="h5" color="text.primary" sx={{
+        }}>
+          {planItem.plan_name}
+        </Typography>
+
         <Typography variant="body1" color="text.primary" sx={{
-            marginBottom: '5px',
+          marginBottom: '5px',
         }}>
           {planItem.plan_desc}
         </Typography>
 
+        <Typography variant='subtitle1' color="text.secondary" mt={5}>
+            { planItem?.start_ts && planItem.end_ts ? formatTimeOfEvent(planItem.start_ts, planItem.end_ts) : ""} 
+        </Typography>
 
         {/* MAP GOES HERE */}
         {/* <SimpleMap center={{lat: planItem.plan_lat || 0, lng: planItem.plan_lng || 0}} zoom={15} /> */}
         <PlanFeedMap center={{lat: planItem.plan_lat || 0, lng: planItem.plan_lng || 0}} zoom={15} />
-
-        <Typography variant='body2' sx={{
-            marginTop: '10px'
-        }}>
-            Start: {planItem.start_ts?.toLocaleString()}
-        </Typography>
-
-        <Typography variant='body2' sx={{
-            marginTop: '10px'
-        }}>
-            End: {planItem.end_ts?.toLocaleString()}
-        </Typography>
 
       </CardContent>
       <CardActions disableSpacing>
