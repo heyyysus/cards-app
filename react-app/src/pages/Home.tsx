@@ -60,8 +60,8 @@ const HomePage: FC<HomePageProps> = ({  }) => {
             
         </Backdrop>
         <Fab color="primary" aria-label="add" onClick={() => setShowPlansForm(true)} sx={{
-            position: 'absolute',
-            bottom: '100px',
+            position: 'fixed',
+            bottom: '75px',
             justifySelf: 'center',
             alignSelf: 'center',
         }}>
