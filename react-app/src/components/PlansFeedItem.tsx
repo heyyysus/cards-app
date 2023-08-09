@@ -24,6 +24,7 @@ import { PlanFeedMap } from './PlanFeedMap';
 import PlansFeedItemOptionsMenu from './PlansFeedItemOptionsMenu';
 import { User } from '@auth0/auth0-react';
 import { format } from 'node:path/posix';
+import { Divider } from '@mui/material';
 
 export interface PlansFeedItemProps {
     planItem: IPlan,
@@ -81,7 +82,7 @@ export const PlansFeedItem: FC<PlansFeedItemProps> =  ({ planItem, localUser, ha
           </IconButton>
         }
         title={planItem.author?.username}
-        subheader={planItem?.ts ? formatTimestampToString(planItem.ts) : ""}
+        subheader={planItem?.ts ? `Posted ${formatTimestampToString(planItem.ts)}` : ""}
       />
       <CardContent>
         {/** PlansFeedItemOptionsMenu Must be in front of PlanFeedMap */}
@@ -108,7 +109,12 @@ export const PlansFeedItem: FC<PlansFeedItemProps> =  ({ planItem, localUser, ha
           {planItem.plan_desc}
         </Typography>
 
-        <Typography variant='subtitle1' color="text.secondary" mt={5}>
+        <Divider sx={{
+          "marginTop": "20px",
+          "marginBottom": "20px",
+        }} />
+
+        <Typography variant='subtitle1' color="text.secondary">
             { planItem?.start_ts && planItem.end_ts ? formatTimeOfEvent(planItem.start_ts, planItem.end_ts) : ""} 
         </Typography>
 
