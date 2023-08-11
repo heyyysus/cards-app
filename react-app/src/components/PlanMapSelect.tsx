@@ -10,6 +10,7 @@ import { useTheme } from '@mui/material/styles';
 
 // The following is required to stop "npm build" from transpiling mapbox code.
 import mapboxgl from 'mapbox-gl';
+import { Button, TextField } from '@mui/material';
     // notice the exclamation point in the import.
     // @ts-ignore
     // eslint-disable-next-line import/no-webpack-loader-syntax, import/no-unresolved
@@ -39,22 +40,44 @@ export const PlanMapSelect: FC<PlanMapSelectProps> =  ({initCenter, initZoom, se
         console.log("newLat: " + newLat + ", newLng: " + newLng + ", newZoom: " + newZoom);
     };
 
-    return <Map
-    mapboxAccessToken = {secret.MAPBOX_API_KEY}
-    initialViewState = {{
-      longitude: initCenter.lng,
-      latitude: initCenter.lat,
-      zoom: initZoom
-    }}
-    mapStyle="mapbox://styles/mapbox/streets-v12"
-    style={{
-      width: '400px',
-      height: '300px',
-    }}
-    onMove={(e) => { onMapMove(e.viewState.latitude, e.viewState.longitude, e.viewState.zoom) }}
-  >
-    <Marker longitude={lng} latitude={lat} anchor="center" color={ theme.palette.primary.main }>
-        {/* <LocationOnIcon color='primary' /> */}
-    </Marker>
-  </Map>;
+    return <div>
+        <Map
+        mapboxAccessToken = {secret.MAPBOX_API_KEY}
+        initialViewState = {{
+        longitude: initCenter.lng,
+        latitude: initCenter.lat,
+        zoom: initZoom
+        }}
+        mapStyle="mapbox://styles/mapbox/streets-v12"
+        style={{
+        width: '400px',
+        height: '300px',
+        }}
+        onMove={(e) => { onMapMove(e.viewState.latitude, e.viewState.longitude, e.viewState.zoom) }}
+    >
+        <Marker longitude={lng} latitude={lat} anchor="center" color={ theme.palette.primary.main }>
+            {/* <LocationOnIcon color='primary' /> */}
+        </Marker>
+
+
+    </Map>
+    <div id="map-select-search-area" style={{
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '400px',
+        marginTop: '10px',
+    }}>
+
+        <TextField id="search-query" label="Search" variant="outlined" size="small" margin='none' sx={{
+            width: '75%',
+        }}  />
+
+        <Button variant="contained" color="primary"  sx={{
+            width: '20%',
+        }}> Search </Button>
+
+    </div>
+    
+  </div>;
 }
