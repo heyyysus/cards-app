@@ -1,0 +1,21 @@
+.mapSearchListItem {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 15px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: background-color 0.2s ease-in-out;
+    margin-bottom: 10px;
+}
+
+.mapSearchListItem:hover {
+    background-color: #eee;
+}
+
+.mapSearchListItemName {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
