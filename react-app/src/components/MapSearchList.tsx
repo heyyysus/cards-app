@@ -11,7 +11,7 @@ export const MapSearchList: FC<MapSearchListProps> = ({ listItems }) => {
         <div style={{
             display: 'flex',
             flexDirection: 'column',
-            width: '100%',
+            maxWidth: '600px',
             height: '40vh',
             overflowY: 'scroll',
         }}>
