@@ -33,6 +33,7 @@ Item1.args = {
             name: 'name',
             address: 'address',
             place_formatted: 'place_formatted',
+            center: { lng: 0, lat: 0 },
             onSelect: () => {},
         },
         {
@@ -40,6 +41,7 @@ Item1.args = {
             name: 'name',
             address: 'address',
             place_formatted: 'place_formatted',
+            center: { lng: 0, lat: 0 },
             onSelect: () => {},
         },
         {
@@ -47,6 +49,7 @@ Item1.args = {
             name: 'name',
             address: 'address',
             place_formatted: 'place_formatted',
+            center: { lng: 0, lat: 0 },
             onSelect: () => {},
         },
     ],

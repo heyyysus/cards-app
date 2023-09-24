@@ -10,6 +10,8 @@ import PublicIcon from '@mui/icons-material/Public';
 import PeopleIcon from '@mui/icons-material/People';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import { IPlan } from '../api/models/IPlan';
+import Step1 from './PlansFormSteps/Step1';
+import Step2 from './PlansFormSteps/Step2';
 
 
 export interface PlansFormProps {
@@ -31,9 +33,41 @@ export const PlansForm: FC<PlansFormProps> =  ({ handleSubmit, handleExit, local
     const [ formEndTime, setFormEndTime ] = useState<string>(ISOTime);
     const [ formPublic, setFormPublic ] = useState(true);
 
+    const [ step, setStep ] = useState(0);
+
     const dateFromDateTime = (date: string, time: string) => {
         return new Date(`${date}T${time}`);
     }
+
+    const handleBack = () => {
+        if(step > 0)
+            setStep(step - 1);
+        else
+            handleExit();
+    }
+
+    const handleNextStep1 = ({ planName, planDesc, planStartDate, planEndDate, planPrivacy }: {
+        planName: string,
+        planDesc: string,
+        planStartDate: Date,
+        planEndDate: Date,
+        planPrivacy: boolean,
+    }) => {
+        setStep(1);
+        setFormName(planName);
+        setFormDesc(planDesc);
+        setFormStartDate(planStartDate.toISOString().split('T')[0]);
+        setFormStartTime(planStartDate.toISOString().split('T')[1]);
+        setFormEndDate(planEndDate.toISOString().split('T')[0]);
+        setFormEndTime(planEndDate.toISOString().split('T')[1]);
+        setFormPublic(planPrivacy);
+    }
+
+    const steps = [
+        <Step1 localUser={localUser} handleNext={ handleNextStep1 } />,
+        <Step2 />,
+    ];
+    
 
     return (
         <Paper sx={{
@@ -48,7 +82,7 @@ export const PlansForm: FC<PlansFormProps> =  ({ handleSubmit, handleExit, local
             display: 'flex',
             flexDirection: 'row',
             }}>
-                <Button color='primary' onClick={() => handleExit()} size='large' sx={{
+                <Button color='primary' onClick={() => handleBack()} size='large' sx={{
                     width: '150px',
                 }}>
                     <ArrowBackIcon sx={{ marginRight: '10px' }} color='primary' />
@@ -59,89 +93,7 @@ export const PlansForm: FC<PlansFormProps> =  ({ handleSubmit, handleExit, local
                 padding: '30px',
                 overflowY: 'scroll'
             }}>
-                <ProfileCard user={localUser} />
-                
-                <TextField
-                    id="name-field"
-                    label="Name"
-                    margin='dense'
-                    variant='standard'
-                    value={formName}
-                    onChange={(e) => setFormName(e.target.value)}
-                />
-
-                <TextField fullWidth multiline minRows={3} maxRows={6} 
-                label="Description" id="description-field" margin='dense' variant='standard'
-                value={formDesc} onChange={(e) => setFormDesc(e.target.value)} />
-                
-                <div style={{
-                    marginTop: '20px',
-                    marginBottom: '20px',
-                }}>
-                    <p>Event Start: </p>
-
-                    <input type='date' value={formStartDate} style={{marginRight: '10px'  }} 
-                        onChange={e => {setFormStartDate(e.target.value)}} />
-
-                    <input type='time' value={formStartTime} 
-                        onChange={e => {setFormStartTime(e.target.value)}} />
-                </div>
-
-                <div style={{
-                    marginTop: '20px',
-                    marginBottom: '20px',
-                }}>
-                    <p>Event End: </p>
-                    <input type='date' value={formEndDate} style={{marginRight: '10px'  }} 
-                        onChange={e => {setFormEndDate(e.target.value)}} />
-
-                    <input type='time' value={formEndTime} 
-                        onChange={e => {setFormEndTime(e.target.value)}} />
-                </div>
-                
-                <div>
-                    <FormControlLabel label={(formPublic) ? 
-                        (<div style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                        }}>
-                            <PublicIcon /> 
-                            <span style={{
-                                marginLeft: '7px',
-                                paddingTop: '4px',
-                            }}>
-                                Public
-                            </span>
-                        </div>) : 
-                        (<div style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                        }}>
-                            <PeopleIcon /> 
-                            <span style={{
-                                marginLeft: '7px',
-                                paddingTop: '4px',
-                            }}>
-                                Friends Only
-                            </span>
-                        </div>)}
-                    control={<Switch color='primary' defaultChecked onChange={() => setFormPublic(!formPublic)}/>}  />
-                </div>
-
-                <Button variant='contained' color='primary' onClick={() => {
-                    handleSubmit({
-                        plan_id: 0,
-                        plan_name: formName,
-                        plan_desc: formDesc,
-                        author: localUser,
-                        start_ts: dateFromDateTime(formStartDate, formStartTime),
-                        end_ts: dateFromDateTime(formEndDate, formEndTime)
-                    })
-                }} sx={{
-                    marginTop: '30px'
-                }}>Post Plan</Button>
+                { steps[step] }
             </div>
         </Paper>
     );
