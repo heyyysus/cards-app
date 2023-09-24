@@ -1,4 +1,4 @@
-import { Button, FormControlLabel, Input, Paper, Switch, TextField } from '@mui/material';
+import { Button, FormControlLabel, Input, Paper, Switch, TextField, Typography } from '@mui/material';
 import { FC, useEffect, useState } from 'react';
 import { IUser } from '../api/models/IUser';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -7,6 +7,7 @@ import Datetime from 'react-datetime';
 import { width } from '@mui/system';
 
 import PublicIcon from '@mui/icons-material/Public';
+import PeopleIcon from '@mui/icons-material/People';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import { IPlan } from '../api/models/IPlan';
 
@@ -100,8 +101,32 @@ export const PlansForm: FC<PlansFormProps> =  ({ handleSubmit, handleExit, local
                 
                 <div>
                     <FormControlLabel label={(formPublic) ? 
-                        (<div>Public Plan</div>) : 
-                        (<div>Invitees Only</div>)}
+                        (<div style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                        }}>
+                            <PublicIcon /> 
+                            <span style={{
+                                marginLeft: '7px',
+                                paddingTop: '4px',
+                            }}>
+                                Public
+                            </span>
+                        </div>) : 
+                        (<div style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                        }}>
+                            <PeopleIcon /> 
+                            <span style={{
+                                marginLeft: '7px',
+                                paddingTop: '4px',
+                            }}>
+                                Friends Only
+                            </span>
+                        </div>)}
                     control={<Switch color='primary' defaultChecked onChange={() => setFormPublic(!formPublic)}/>}  />
                 </div>
 
