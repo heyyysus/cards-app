@@ -40,7 +40,8 @@ export const PlansForm: FC<PlansFormProps> =  ({ handleSubmit, handleExit, local
             position: 'fixed',
             top: '50%',
             left: '50%',
-            transform: 'translate(-50%, -50%)'
+            transform: 'translate(-50%, -50%)',
+            width: '600px',
         }}>
             <div style={{
             display: 'flex',
