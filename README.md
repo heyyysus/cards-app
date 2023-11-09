@@ -1,5 +1,5 @@
 # Hoppin
-An application to help UCSB students and the local community to organize events. 
+ChatGPT"Hoppin" is a streamlined web application that allows users to easily find and join events of interest. With the 'Hop In' feature, attendees can confirm their participation, enter a group chat with others, and receive essential event notifications.
 
 ### Contributors
 - Jesus Velarde - heyyysus
