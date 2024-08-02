@@ -38,7 +38,12 @@ export const PlanMapSelect: FC<PlanMapSelectProps> =  ({initCenter, initZoom, se
 
     const [bearing, setBearing] = useState(0);
     const [pitch, setPitch] = useState(0);
-    const [padding, setPadding] = useState({});
+    const [padding, setPadding] = useState({
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+    });
 
     const [ selectedCoord, setSelectedCoord ] = useState<{lat: number, lng: number}>({lat: 0, lng: 0});
 
@@ -73,6 +78,8 @@ export const PlanMapSelect: FC<PlanMapSelectProps> =  ({initCenter, initZoom, se
         bearing: bearing,
         pitch: pitch,
         padding: padding,
+        width: 400,
+        height: 300,
     };
 
 
