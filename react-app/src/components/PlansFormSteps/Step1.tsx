@@ -62,7 +62,14 @@ const Step1 = ({ localUser, handleNext }: Step1Props) => {
     }
 
     return (
-    <>
+    <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'start',
+        justifyContent: 'center',
+        width: '100%',
+        fontSize: '18px',
+    }}>
     
         <ProfileCard user={localUser} />
         
@@ -73,11 +80,17 @@ const Step1 = ({ localUser, handleNext }: Step1Props) => {
             variant='standard'
             value={formName}
             onChange={(e) => setFormName(e.target.value)}
+            style={{
+                width: '500px',
+            }}
         />
 
-        <TextField fullWidth multiline minRows={3} maxRows={6} 
+        <TextField multiline minRows={3} maxRows={6} 
         label="Description" id="description-field" margin='dense' variant='standard'
-        value={formDesc} onChange={(e) => setFormDesc(e.target.value)} />
+        value={formDesc} onChange={(e) => setFormDesc(e.target.value)}
+        style={{
+            width: '500px',
+        }} />
         
         <div style={{
             marginTop: '20px',
@@ -85,10 +98,10 @@ const Step1 = ({ localUser, handleNext }: Step1Props) => {
         }}>
             <p>Event Start: </p>
 
-            <input type='date' value={formStartDate} style={{marginRight: '10px'  }} 
+            <input type='date' value={formStartDate} style={{marginRight: '10px', fontSize: '18px' }} 
                 onChange={e => {setFormStartDate(e.target.value)}} />
 
-            <input type='time' value={formStartTime} 
+            <input type='time' value={formStartTime} style={{marginRight: '10px', fontSize: '18px' }} 
                 onChange={e => {setFormStartTime(e.target.value)}} />
         </div>
 
@@ -97,10 +110,10 @@ const Step1 = ({ localUser, handleNext }: Step1Props) => {
             marginBottom: '20px',
         }}>
             <p>Event End: </p>
-            <input type='date' value={formEndDate} style={{marginRight: '10px'  }} 
+            <input type='date' value={formEndDate} style={{marginRight: '10px', fontSize: '18px' }} 
                 onChange={e => {setFormEndDate(e.target.value)}} />
 
-            <input type='time' value={formEndTime} 
+            <input type='time' value={formEndTime} style={{marginRight: '10px', fontSize: '18px' }} 
                 onChange={e => {setFormEndTime(e.target.value)}} />
             
             { 
@@ -159,7 +172,7 @@ const Step1 = ({ localUser, handleNext }: Step1Props) => {
         }} sx={{
             marginTop: '30px',
         }}>Next</Button>
-    </>
+    </div>
     );
 }
 

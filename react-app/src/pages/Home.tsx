@@ -71,9 +71,10 @@ const HomePage: FC<HomePageProps> = ({  }) => {
         open={showPlansForm}
         >
             
-        <PlansForm localUser={localUser} handleSubmit={() => {}} handleExit={() => setShowPlansForm(false)} />
+            <PlansForm localUser={localUser} handleSubmit={() => {}} handleExit={() => setShowPlansForm(false)} />
             
         </Backdrop>
+
         <Fab color="primary" aria-label="add" onClick={() => setShowPlansForm(true)} sx={{
             position: 'fixed',
             bottom: '75px',

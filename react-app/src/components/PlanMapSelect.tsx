@@ -36,6 +36,10 @@ export const PlanMapSelect: FC<PlanMapSelectProps> =  ({initCenter, initZoom, se
     const [lat, setLat] = useState(initCenter.lat);
     const [zoom, setZoom] = useState(initZoom);
 
+    const [bearing, setBearing] = useState(0);
+    const [pitch, setPitch] = useState(0);
+    const [padding, setPadding] = useState({});
+
     const [ selectedCoord, setSelectedCoord ] = useState<{lat: number, lng: number}>({lat: 0, lng: 0});
 
     const [ searchQuery, setSearchQuery ] = useState("");
@@ -62,6 +66,15 @@ export const PlanMapSelect: FC<PlanMapSelectProps> =  ({initCenter, initZoom, se
         setZoom(15);
     }
 
+    const viewState = {
+        longitude: lng,
+        latitude: lat,
+        zoom: zoom,
+        bearing: bearing,
+        pitch: pitch,
+        padding: padding,
+    };
+
 
     return (
     <div style={{
@@ -72,10 +85,11 @@ export const PlanMapSelect: FC<PlanMapSelectProps> =  ({initCenter, initZoom, se
         <Map
         mapboxAccessToken = {secret.MAPBOX_API_KEY}
         initialViewState = {{
-        longitude: initCenter.lng,
-        latitude: initCenter.lat,
+        longitude: lng,
+        latitude: lat,
         zoom: initZoom
         }}
+        viewState={viewState}
         mapStyle="mapbox://styles/mapbox/streets-v12"
         style={{
         width: '400px',
